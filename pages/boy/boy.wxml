@@ -1,0 +1,12 @@
+<!--pages/boy/boy.wxml-->
+<view class="tabCar flex_wrp flex_dr" style="z-index:99">
+  <navigator class='flex_item t_a' url="../../pages/boy/boy?title='美男'" hover-class="navigator-hover">美男</navigator>
+  <navigator class='flex_item t_a' url="../../pages/meizi/meizi?title='美女'" hover-class="navigator-hover">美女</navigator>
+  <!-- <navigator url="../redirect/redirect?title=redirect" open-type="redirect" hover-class="other-navigator-hover">在当前页打开</navigator> -->
+  <!-- <navigator url="/index/index" open-type="switchTab" hover-class="other-navigator-hover">切换 Tab</navigator> -->
+</view>
+<!-- <view class='t_a'><text>美男</text></view> -->
+<view class='t_a'>
+  <video src='http://zsfmyz.top/movies/小李子.mp4'></video>
+</view>
+<view style='margin-top:20px;' class='t_a'>暂时只有一个，哈哈哈哈哈</view>

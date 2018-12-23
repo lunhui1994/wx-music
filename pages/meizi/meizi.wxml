@@ -1,0 +1,23 @@
+<!--pages/longTime/longTime.wxml.wxml-->
+<!-- <text>pages/longTime/longTime.wxml</text> -->
+<!--logs.wxml-->
+<view class="tabCar flex_wrp flex_dr" style="z-index:99">
+  <navigator class='flex_item t_a' url="../../pages/boy/boy?title='美男'" hover-class="navigator-hover">美男</navigator>
+  <navigator class='flex_item t_a' url="../../pages/meizi/meizi?title='美女'" hover-class="navigator-hover">美女</navigator>
+  <!-- <navigator url="../redirect/redirect?title=redirect" open-type="redirect" hover-class="other-navigator-hover">在当前页打开</navigator> -->
+  <!-- <navigator url="/index/index" open-type="switchTab" hover-class="other-navigator-hover">切换 Tab</navigator> -->
+</view>
+<view class="container">
+  <!-- <picker class='date_start' mode='date'>
+    <input type='text'></input>
+  </picker> -->
+  <!-- <view class='card' style='width:90%;'><image class='image b_r_5' mode='aspectFill' src="http://ww1.sinaimg.cn/large/0065oQSqly1frrifts8l5j30j60ojq6u.jpg"></image></view> -->
+  <view hidden='hidden'>加载中</view>  
+    <!-- <view class='t_a'><text>美女</text></view> -->
+  
+    <scroll-view croll-y="true" class='scrollView' bindscrolltoupper="upper" bindscrolltolower="lower" bindscroll="scroll">
+      <view wx:for="{{items}}" >
+        <view class='card'><image class='image b_r_5' mode='aspectFill' src="{{item.src}}"></image></view>
+      </view>
+    </scroll-view>
+</view>
