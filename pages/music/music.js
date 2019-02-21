@@ -53,8 +53,12 @@ Page({
     getQMusic(that);
   },
   flagMusicPlay: function (event) {
-    var that = this;
+    var that = this;  
     var musicData = event.currentTarget.dataset.music.data;
+    that.initPlay(musicData)
+  },
+  initPlay: function (musicData) {
+    var that = this;
     // 描述 musicData.albumdesc
     // 名字 musicData.albumname
     // id musicData.albumid
@@ -67,7 +71,7 @@ Page({
     var songmid = musicData.songmid;
     var filename = 'C400' + songmid + '.m4a'
     wx.request({
-      url: 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?format=json205361747&platform=yqq&cid=205361747&songmid=' + songmid +'&filename=' + filename + '&guid=126548448',
+      url: 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?format=json205361747&platform=yqq&cid=205361747&songmid=' + songmid + '&filename=' + filename + '&guid=126548448',
       header: {
         "Content-Type": "application/json"
       },
@@ -145,10 +149,17 @@ const audioInit = (that, url)=> {
   that.data.innerAudioContext = wx.createInnerAudioContext();
   that.data.innerAudioContext.src = url;
   that.data.innerAudioContext.autoplay = false
-  that.data.innerAudioContext.onPlay(() => {
-    that.setData({
-      duration: Math.floor(that.data.innerAudioContext.duration)
-    })
+  
+  that.data.innerAudioContext.onCanplay(() => {
+    that.data.innerAudioContext.duration;
+    setTimeout(()=> {
+      that.setData({
+        duration: Math.floor(that.data.innerAudioContext.duration)
+      })
+    }, 300)
+  })
+  that.data.innerAudioContext.onPlay(() => { 
+    
   })
   that.data.innerAudioContext.onStop(() => {
     console.log('i am onStop')
@@ -157,13 +168,17 @@ const audioInit = (that, url)=> {
     that.data.innerAudioContext.destroy()
   })
   that.data.innerAudioContext.onTimeUpdate(() => {
+    // if (!that.data.duration) {
+    //   that.setData({
+    //     duration: Math.floor(that.data.innerAudioContext.duration)
+    //   })
+    // }
     if ((Math.floor(that.data.innerAudioContext.currentTime) - that.data.currentTime) > 0.5 | (Math.floor(that.data.innerAudioContext.currentTime) - that.data.currentTime) < 0.5) {
       that.setData({
         currentTime: that.data.innerAudioContext.currentTime,
         currentTimeText: uitl.sTt(that.data.innerAudioContext.currentTime)
       })
     }
-    
   })
   that.data.innerAudioContext.onEnded(() => {
     console.log('i am onEnded')
@@ -186,6 +201,8 @@ const getQMusic = (that) => {
         that.setData({
           songList: res.data.songlist
         })
+      console.log(that.data.songList[0]);
+      that.initPlay(that.data.songList[0].data)
     }
   })
 }

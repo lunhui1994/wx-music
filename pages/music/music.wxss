@@ -51,7 +51,6 @@ page {
 .timeBox {
   display: block;
   width: 750rpx;
-  height: 150rpx;
   flex-grow: 1;
 }
 .timePlay {
@@ -80,4 +79,12 @@ page {
 
     -o-animation: rotation 6s linear infinite;
 
+}
+/* 播放器组件底部显示 */
+.playCtr {
+  position:fixed;
+  bottom:0px;
+  z-index:100;
+  background-color:#eee;
+  padding: 20px 15px;
 }
