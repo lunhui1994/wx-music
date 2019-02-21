@@ -1,0 +1,5 @@
+<!--pages/nav/nav.wxml-->
+
+  <view class="tabCar flex_wrp flex_dr" style="z-index:99">
+    <navigator wx:for="{{navs}}" wx:for-item="nav" class='flex_item t_a' url="{{nav.url}}" hover-class="navigator-hover">{{nav.title}}</navigator>
+  </view>

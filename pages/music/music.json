@@ -1,0 +1,11 @@
+{
+  "navigationBarTitleText": "音乐",
+  "enablePullDownRefresh": true,
+  "navigationBarBackgroundColor": "#333",
+  "navigationBarTextStyle": "light",
+  "backgroundColor": "#eeeeee",
+  "backgroundTextStyle": "light",
+  "usingComponents": {
+    "nav": "/pages/nav/nav"
+  }
+} 

@@ -3,12 +3,31 @@
     "pages/index/index",
     "pages/logs/logs",
     "pages/meizi/meizi",
-    "pages/boy/boy"
+    "pages/music/music"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#000",
     "navigationBarTitleText": "WeChat",
     "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#a9b7b7",
+    "selectedColor": "#11cd6e",
+    "backgroundColor": "#fff",
+    "list": [
+      {
+        "pagePath": "pages/meizi/meizi",
+        "text": "福利",
+        "iconPath": "imgs/icons/star.png",
+        "selectedIconPath": "imgs/icons/star-selected.png"
+      },
+      {
+        "pagePath": "pages/music/music",
+        "text": "音乐",
+        "iconPath": "imgs/icons/moon-dreamy.png",
+        "selectedIconPath": "imgs/icons/moon-dreamy-selected.png"
+      }
+    ]
   }
 }

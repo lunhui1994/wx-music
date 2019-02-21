@@ -13,7 +13,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log("longtime加载了");
+    // console.log("longtime加载了");
     var that = this;
     myPage++;
     findMeiZhi(that, myPage);
@@ -23,28 +23,28 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    console.log("longtime初次渲染完成了");
+    // console.log("longtime初次渲染完成了");
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    console.log("longtime显示了");
+    // console.log("longtime显示了");
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-    console.log("longtime隐藏了");
+    // console.log("longtime隐藏了");
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-    console.log("卸载");
+    // console.log("卸载");
   },
 
   /**
@@ -64,7 +64,7 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-    console.log("触底了");
+    // console.log("触底了");
   },
   
   /**
@@ -89,34 +89,33 @@ var myPage = 1;
 
 function findMeiZhi(that, targetPage) {
     // var BASE_URL= "https://gank.io/api/";
-  var BASE_URL = "http://www.zsfmyz.top:8080/api/";
+    var BASE_URL = "https://www.zsfmyz.top:8080/api/";
     var MEIZHI_URL = BASE_URL.concat("data/福利/50/");
   wx.request({
-   url: MEIZHI_URL.concat(targetPage),
-    // url: 'http://www.zsfmyz.top/json1.json',
+    url: encodeURI(MEIZHI_URL.concat(targetPage)), //手动用encodeURI对url进行转码，小程序不自动转码
     header: {
       "Content-Type": "application/json"
     },
     success: function (res) {
       console.log(res)
       // var data = JSON.parse(res.data)
-      // if (res == null ||
-      //   res.data == null ||
-      //   res.data.results == null ||
-      //   res.data.results.length <= 0) {
+      if (res == null ||
+        res.data == null ||
+        res.data.results == null ||
+        res.data.results.length <= 0) {
 
-      //   that.setData({
-      //     hidden: true
-      //   });
+        that.setData({
+          hidden: true
+        });
 
-      //   wx.showToast({
-      //     title: Constant.DATA_IS_NULL,
-      //     icon: 'success',
-      //     duration: 2000
-      //   })
-      //   console.error(Constant.DATA_IS_NULL);
-      //   return;
-      // }
+        wx.showToast({
+          title: Constant.DATA_IS_NULL,
+          icon: 'success',
+          duration: 2000
+        })
+        console.error(Constant.DATA_IS_NULL);
+        return;
+      }
 
       var list = [];
       var time = "";
@@ -134,5 +133,4 @@ function findMeiZhi(that, targetPage) {
       });
     }
   });
-
 }

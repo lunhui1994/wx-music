@@ -14,6 +14,21 @@ const formatNumber = n => {
   return n[1] ? n : '0' + n
 }
 
-module.exports = {
-  formatTime: formatTime
+function sTt(s) {
+  var minute = padding(Math.floor(s / 60), 2, '0');
+  var second = padding(Math.floor(s % 60), 2, '0');
+  return [minute, second].join(':');
 }
+
+function padding(number, length, prefix) {
+  if (String(number).length >= length) {
+    return String(number);
+  }
+  return padding(prefix + number, length, prefix);
+}
+module.exports = {
+  formatTime: formatTime,
+  sTt: sTt,
+  padding: padding
+}
+

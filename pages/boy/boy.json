@@ -4,5 +4,8 @@
   "navigationBarBackgroundColor": "#23B5F8",
   "navigationBarTextStyle": "light",
   "backgroundColor": "#eeeeee",
-  "backgroundTextStyle": "light"
+  "backgroundTextStyle": "light",
+  "usingComponents": {
+    "nav": "../../component/nav/nav"
+  }
 }

@@ -1,0 +1,52 @@
+<!--pages/music/music.wxml-->
+<!-- <nav></nav> -->
+<!-- <text>pages/music/music.wxml</text> -->
+<view class='w750r h100p'>
+  <view class='musicBox h100p'>
+   <view class="w750r"> 
+      <view class='music_poster mar0_a marT50'>
+        <image class="{{isplay == false ? 'an' : ''}}" id="pic" src='{{poster}}'></image>
+      </view>
+    </view>
+    <!-- <audio src='../../mc/If.mp3'></audio> -->
+    <!-- <audio src="../../mc/If.mp3" bindplay="onAudioPlay" controls></audio> -->
+    <view class="timeBox marT50 section_gap" >
+      <view class='timePlay fl'>
+        <view bindtap='onAudioPlay' wx:if="{{isplay}}"><image class='w40 h40' src='/imgs/icons/play.png'></image></view> 
+        <view bindtap='onAudioPause' wx:if="{{!isplay}}"><image class='w40 h40' src='/imgs/icons/pause.png'></image></view> 
+      </view>
+      <view class="section fl w250">
+            <view class="body-view">
+                <slider 
+                bindchanging="changingT"
+                bindchange="changeTime" 
+                step="1" 
+                value='{{currentTime}}'
+                min='0' max='{{duration}}' 
+                block-size='16' 
+                left-icon="cancel" 
+                right-icon="success_no_circle"/>
+            </view>
+      </view>
+      <view class='fl gray h40 lh40'>
+            {{currentTimeText}}
+      </view>
+    </view>
+
+    <!-- search -->
+      <view class="marT50 section_gap">
+        <view class="weui-cells">
+          <view class="weui-cell weui-cell_input">
+            <input class="weui-input" value='{{musicName}}' maxlength="10" placeholder="最大输入长度为10" />
+            <button>搜索</button>
+          </view>
+        </view>
+      </view>
+      <!-- songs list -->
+      <view class="marT50 section_gap">
+        <view class="weui-cells">
+          <view bindtap='flagMusicPlay' data-music="{{item}}" class="d_in mar0_5 btn_flag_sm" wx:for="{{songList}}">{{item.data.albumname}}</view>
+        </view>
+      </view>
+  </view>
+</view>

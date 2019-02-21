@@ -1,4 +1,5 @@
 /* pages/boy/boy.wxss */
+/* @import "../../component/nav/nav.wxss"; */
 .tabCar{
   position: fixed;
   bottom: 0px;
