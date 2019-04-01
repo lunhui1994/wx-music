@@ -10,13 +10,14 @@ Page({
     urlList: ["http://ws.stream.qqmusic.qq.com/C400000btw1z1NPZtB.m4a?fromtag=64&guid=126548448&vkey=9AA464B102331F31FE02DB9D5AE1F68885F326FB3A8039160AEF75AD41209F168BA38EF200E67624B7C5B34BE40F178972E01234F7B46823","http://ws.stream.qqmusic.qq.com/M500001VfvsJ21xFqb.mp3?guid=ffffffff82def4af4b12b3cd9337d5e7&uin=346897220&vkey=6292F51E1E384E061FF02C31F716658E5C81F5594D561F2E88B854E81CAAB7806D5E4F103E55D33C16F3FAC506D1AB172DE8600B37E43FAD&fromtag=46"],
     audioPlayT: "播放",
     audioPauseT: "暂停",
-    currentTime:0,
-    currentTimeText:"00:00",
-    duration:0,
+    currentTime: 0,
+    currentTimeText: "00:00",
+    duration: 0,
     isplay: true,
     musicName: "",
-    songList:[],
-    poster:'https://ws1.sinaimg.cn/large/610dc034ly1fhgsi7mqa9j20ku0kuh1r.jpg'
+    songList: [],
+    searchList: [],
+    poster: 'https://ws1.sinaimg.cn/large/610dc034ly1fhgsi7mqa9j20ku0kuh1r.jpg'
   },
   /**
    * 生命周期函数--监听页面加载
@@ -55,6 +56,7 @@ Page({
   flagMusicPlay: function (event) {
     var that = this;  
     var musicData = event.currentTarget.dataset.music.data;
+    console.log(musicData); 
     that.initPlay(musicData)
   },
   initPlay: function (musicData) {
@@ -90,6 +92,7 @@ Page({
       }
     })
   },
+  
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
