@@ -14,7 +14,10 @@ Page({
     currentTimeText: "00:00",
     duration: 0,
     isplay: true,
-    musicName: "",
+    playType: 'single',
+    searchData: {
+      'musicName': ''
+    },
     songList: [],
     searchList: [],
     poster: 'https://ws1.sinaimg.cn/large/610dc034ly1fhgsi7mqa9j20ku0kuh1r.jpg'
@@ -50,28 +53,77 @@ Page({
       isplay: true
     })
   },
+  searchNameFn: function(event) {
+    let that = this;
+    that.setData({
+      'searchData.musicName': event.detail.value
+    })
+  },
   searchMusic: function () {
-    getQMusic(that);
+    let that = this;
+    let param = {
+      key: 579621905,
+      limit: 100,
+      offset: 0,
+      type: 'song',
+      s: that.data.searchData.musicName
+    }
+    let url = "https://api.bzqll.com/music/tencent/search" + uitl.json2str(param);
+    // https://api.bzqll.com/music/tencent/search?key=579621905&s=123&limit=100&offset=0&type=song
+    wx.request({
+      url: url,
+      header: {
+        "Content-Type": "application/json"
+      },
+      success: function(res) {
+        that.setData({
+          searchList: res.data.data
+        })
+
+      }
+    })
+  },
+  // 搜索出来的歌点播
+  searchSinglePlay: function (event) {
+    let that = this;
+    let musicData = event.currentTarget.dataset.music;
+    
+    that.setData({
+      urlList: [musicData.url],
+      poster: musicData.pic,
+      isplay: true,
+      currentTime: 0,
+      currentTimeText: "00:00"
+    })
+    that.data.innerAudioContext.destroy();
+    audioInit(that, that.data.urlList[0]);
+    that.onAudioPlay();
   },
   flagMusicPlay: function (event) {
-    var that = this;  
-    var musicData = event.currentTarget.dataset.music.data;
-    console.log(musicData); 
+    let that = this;  
+    let musicData = event.currentTarget.dataset.music.data;
     that.initPlay(musicData)
   },
   initPlay: function (musicData) {
+    // 通过歌曲信息获取歌曲播放地址和poster地址。
+    // 必要信息：songmid， filename
     var that = this;
+    
     // 描述 musicData.albumdesc
     // 名字 musicData.albumname
     // id musicData.albumid
     var id = musicData.albumid;
+
     // poster url "http://imgcache.qq.com/music/photo/album_300/" + id%100 + "/300_albumpic_" + id + "_0.jpg"
+    // 封面
     that.setData({
-      poster: "http://imgcache.qq.com/music/photo/album_300/" + (id % 100) + "/300_albumpic_" + id + "_0.jpg"
+      poster: "https://imgcache.qq.com/music/photo/album_300/" + (id % 100) + "/300_albumpic_" + id + "_0.jpg"
     })
+    
     // songmid musicData.songmid
     var songmid = musicData.songmid;
     var filename = 'C400' + songmid + '.m4a'
+
     wx.request({
       url: 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?format=json205361747&platform=yqq&cid=205361747&songmid=' + songmid + '&filename=' + filename + '&guid=126548448',
       header: {
@@ -79,7 +131,7 @@ Page({
       },
       success: function (res) {
         var vkey = res.data.data.items[0].vkey;
-        var songurl = 'http://ws.stream.qqmusic.qq.com/' + filename + '?fromtag=64&guid=126548448&vkey=' + vkey;
+        var songurl = 'https://ws.stream.qqmusic.qq.com/' + filename + '?fromtag=64&guid=126548448&vkey=' + vkey;
         that.setData({
           urlList: [songurl],
           isplay: true,
@@ -186,8 +238,12 @@ const audioInit = (that, url)=> {
   that.data.innerAudioContext.onEnded(() => {
     console.log('i am onEnded')
     //播放结束，销毁该实例
-    that.data.innerAudioContext.destroy()
-    console.log('已执行destory()')
+    if (that.data.playType === 'single') {
+      that.data.innerAudioContext.seek(0);
+      that.data.innerAudioContext.play();
+    } else {
+      that.data.innerAudioContext.destroy();
+    }
   })
   that.data.innerAudioContext.onError((res) => {
     that.data.innerAudioContext.destroy()
@@ -204,7 +260,6 @@ const getQMusic = (that) => {
         that.setData({
           songList: res.data.songlist
         })
-      console.log(that.data.songList[0]);
       that.initPlay(that.data.songList[0].data)
     }
   })

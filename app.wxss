@@ -36,13 +36,17 @@
     background-color: #F76260;
 }
 .bc_blue{
-    background-color: #10AEFF;
+    background-color: #10AEFF!important;
 }
 .bc_yellow{
     background-color: #FFBE00;
 }
 .bc_gray{
-    background-color: #C9C9C9;
+    background-color: #C9C9C9!important;
+}
+
+.bc_eee{
+    background-color: #eee!important;
 }
 
 .tc{
@@ -131,6 +135,15 @@ checkbox, radio{
 .fc_e {
   color: #eee;
 }
+.fc_f {
+  color: #fff;
+}
+.fc_f8 {
+  color: #f8f8f8;
+}
+.fc_9 {
+  color: #999;
+}
 .fc_c {
   color: #ccc;
 }
@@ -140,6 +153,11 @@ checkbox, radio{
 .d_in {
   display: inline-block;
 }
+
+.fs_14 {
+  font-size: 14px;
+}
+
 .w40 {
 width: 80rpx;
 }
@@ -152,12 +170,24 @@ height: 80rpx;
 .h75 {
 height: 150rpx;
 }
+.h200 {
+height: 400rpx;
+}
 .lh40{
   line-height: 80rpx;
 }
 .lh28 {
-  line-height: 28rpx;
+  line-height: 56rpx;
 }
+
+.bd_1_ccc{
+  border: 1px solid #ccc;
+}
+
+.db {
+  display: block;
+}
+
 .mar0_5 {
   margin: 0 10rpx;
 }
@@ -173,6 +203,14 @@ height: 150rpx;
 .o_hi {
   overflow: hidden;
 }
+.hover_state:hover {
+  background-color: #eee;
+}
+
+.br_5 {
+  border-radius: 10rpx;
+}
+
 .btn_flag_sm {
   padding: 10rpx 20rpx;
   line-height: 32rpx;

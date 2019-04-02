@@ -2,7 +2,7 @@
   "navigationBarTitleText": "帅哥",
   "enablePullDownRefresh": true,
   "navigationBarBackgroundColor": "#23B5F8",
-  "navigationBarTextStyle": "light",
+  "navigationBarTextStyle": "white",
   "backgroundColor": "#eeeeee",
   "backgroundTextStyle": "light",
   "usingComponents": {

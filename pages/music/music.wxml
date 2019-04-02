@@ -37,9 +37,13 @@
       <view class="marT50 section_gap">
         <view class="weui-cells">
           <view class="weui-cell weui-cell_input">
-            <input class="weui-input" value='{{musicName}}' maxlength="10" placeholder="最大输入长度为10" />
-            <button>搜索</button>
+            <input class="weui-input tc" bindinput='searchNameFn' maxlength="10" placeholder="歌名"/>
+            <button bindtap='searchMusic'>搜索</button>
           </view>
+          <!-- searchlist -->
+          <scroll-view scroll-y class=' br_5 bd_1_ccc fc_f8 h200' wx:if="{{searchList.length}}">
+            <view bindtap='searchSinglePlay' wx:for="{{searchList}}" data-music="{{song}}" wx:for-item="song" class="lh28 fc_9 db tc fs_14">{{song.name}}----{{song.singer}}</view>
+          </scroll-view> 
         </view>
       </view>
       <!-- songs list -->

@@ -17,7 +17,7 @@
     "backgroundColor": "#fff",
     "list": [
       {
-        "pagePath": "pages/meizi/meizi",
+        "pagePath": "pages/logs/logs",
         "text": "福利",
         "iconPath": "imgs/icons/star.png",
         "selectedIconPath": "imgs/icons/star-selected.png"

@@ -86,5 +86,5 @@ page {
   bottom:0px;
   z-index:100;
   background-color:#eee;
-  padding: 20px 15px;
+  padding: 10px 15px;
 }

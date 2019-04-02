@@ -52,7 +52,7 @@ Page({
    */
   onPullDownRefresh: function () {
       var that = this;
-    ++myPage;
+      ++myPage;
       that.setData({
         hidden: false
       });

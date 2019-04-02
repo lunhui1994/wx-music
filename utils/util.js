@@ -26,9 +26,26 @@ function padding(number, length, prefix) {
   }
   return padding(prefix + number, length, prefix);
 }
-module.exports = {
+
+function json2str(json) {
+  var str = '';
+  var num = 0;
+  for (var k in json) {
+    if ((typeof json[k] === 'string' && json[k])
+      || (typeof json[k] === 'boolean')
+      || (typeof json[k] === 'number' && json[k] >= 0)) {
+      str += (num == 0 ? '' : '&') + k + '=' + json[k];
+      num++;
+    }
+  }
+  num && (str = '?' + str);
+  return str;
+}
+let fn = {
   formatTime: formatTime,
   sTt: sTt,
-  padding: padding
+  padding: padding,
+  json2str: json2str
 }
+module.exports = fn;
 
