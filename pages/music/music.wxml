@@ -1,56 +1,75 @@
 <!--pages/music/music.wxml-->
 <!-- <nav></nav> -->
 <!-- <text>pages/music/music.wxml</text> -->
-<view class='w750r h100p'>
-  <view class='musicBox h100p'>
-   <view class="w750r"> 
-      <view class='music_poster mar0_a marT50'>
+<block class='padding bg-white h100p'>
+  <view class="padding bg-white bg-gradual-green">
+    <view class="basis-lg margin-xs padding-sm radius">
+      <view class="padding text-center text-df">
+        <text class="text-Abc">歌名</text>
+      </view>
+      <view class='music_poster mar0_a'>
         <image class="{{isplay == false ? 'an' : ''}}" id="pic" src='{{poster}}'></image>
       </view>
     </view>
-    <!-- <audio src='../../mc/If.mp3'></audio> -->
-    <!-- <audio src="../../mc/If.mp3" bindplay="onAudioPlay" controls></audio> -->
-    <view class="timeBox marT50 section_gap playCtr" >
-      <view class='timePlay fl'>
-        <view bindtap='onAudioPlay' wx:if="{{isplay}}"><image class='w40 h40' src='/imgs/icons/play.png'></image></view> 
-        <view bindtap='onAudioPause' wx:if="{{!isplay}}"><image class='w40 h40' src='/imgs/icons/pause.png'></image></view> 
+  </view>
+  <view class="timeBox marT50 section_gap playCtr">
+    <view class='timePlay fl'>
+      <view bindtap='onAudioPlay' wx:if="{{isplay}}">
+        <image class='w40 h40' src='/imgs/icons/play.png'></image>
       </view>
-      <view class="fl w250">
-            <view class="body-view">
-                <slider 
-                bindchanging="changingT"
-                bindchange="changeTime" 
-                step="1" 
-                value='{{currentTime}}'
-                min='0' max='{{duration}}' 
-                block-size='16' 
-                left-icon="cancel" 
-                right-icon="success_no_circle"/>
-            </view>
-      </view>
-      <view class='fl gray h40 lh40'>
-            {{currentTimeText}}
+      <view bindtap='onAudioPause' wx:if="{{!isplay}}">
+        <image class='w40 h40' src='/imgs/icons/pause.png'></image>
       </view>
     </view>
-
-    <!-- search -->
-      <view class="marT50 section_gap">
-        <view class="weui-cells">
-          <view class="weui-cell weui-cell_input">
-            <input class="weui-input tc" bindinput='searchNameFn' maxlength="10" placeholder="歌名"/>
-            <button bindtap='searchMusic'>搜索</button>
-          </view>
-          <!-- searchlist -->
-          <scroll-view scroll-y class=' br_5 bd_1_ccc fc_f8 h200' wx:if="{{searchList.length}}">
-            <view bindtap='searchSinglePlay' wx:for="{{searchList}}" data-music="{{song}}" wx:for-item="song" class="lh28 fc_9 db tc fs_14">{{song.name}}----{{song.singer}}</view>
-          </scroll-view> 
-        </view>
+    <view class="fl w250">
+      <view class="body-view">
+        <slider bindchanging="changingT" bindchange="changeTime" step="1" value='{{currentTime}}' min='0' max='{{duration}}' block-size='16' left-icon="cancel" right-icon="success_no_circle" />
       </view>
-      <!-- songs list -->
-      <view class="marT50 section_gap">
-        <view class="weui-cells">
-          <view bindtap='flagMusicPlay' data-music="{{item}}" class="d_in mar5 o_hi btn_flag_sm" wx:for="{{songList}}">{{item.data.albumname}}</view>
-        </view>
-      </view>
+    </view>
+    <view class='fl gray h40 lh40'>
+      {{currentTimeText}}
+    </view>
   </view>
+  <scroll-view scroll-x class="bg-green nav text-center">
+    <view class="cu-item {{0==TabCur?'text-white cur':''}}" bindtap="tabSelect" data-id="0">
+      <text class="icon-camerafill"></text> 搜索
+    </view>
+    <view class="cu-item {{1==TabCur?'text-white cur':''}}" bindtap="tabSelect" data-id="1">
+      <text class="icon-upstagefill"></text> 排行榜
+    </view>
+    <view class="cu-item {{2==TabCur?'text-white cur':''}}" bindtap="tabSelect" data-id="2">
+      <text class="icon-clothesfill"></text> 歌曲
+    </view>
+  </scroll-view>
+  <!-- search -->
+  <view class="padding bg-white" hidden="{{TabCur!=0}}">
+    <form>
+      <view class="cu-form-group">
+        <view class="title">歌曲搜索：</view>
+        <input placeholder='输入你喜欢的歌曲名称' bindinput='searchNameFn'></input>
+        <button bindtap='searchMusic' class="cu-btn bg-green shadow">搜索</button>
+      </view>
+    </form>
+    <!-- searchlist -->
+    <scroll-view scroll-y class='bg-green padding radius text-center shadow-blur light h200' wx:if="{{searchList.length}}">
+      <view bindtap='searchSinglePlay' wx:for="{{searchList}}" wx:key="id" data-music="{{song}}" wx:for-item="song" class="lh28 db fs_14">{{song.name}}----{{song.singer}}</view>
+    </scroll-view>
+  </view>
+  <!-- songs list -->
+  <view class="padding bg-white" hidden="{{TabCur!=1}}">
+    <view class="weui-cells">
+      <view class="padding-xs d_in" wx:key="cur_count" bindtap='flagMusicPlay' data-music="{{item}}" wx:for="{{songList}}" wx:key>
+        <view class="cu-tag line-green radius">{{item.data.albumname}}</view>
+      </view>
+    </view>
+  </view>
+  <!-- song detail -->
+  <view class="bg-green padding radius text-center shadow-blur light h300" hidden="{{TabCur!=2}}">
+    
+  </view>
+</block>
+
+<view class='cu-load load-modal' wx:if="{{loadModal}}">
+  <view class="cu-avatar round png" mode="aspectFit" style="background-image:url(/imgs/logo.png);"></view>
+  <view class='gray-text'>加载中...</view>
 </view>

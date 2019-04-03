@@ -3,7 +3,12 @@
     "pages/index/index",
     "pages/logs/logs",
     "pages/meizi/meizi",
-    "pages/music/music"
+    "pages/music/music",
+    "pages/about/about/about",
+    "pages/about/log/log",
+    "pages/about/test/list",
+    "pages/about/test/filter",
+    "pages/about/home/home"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -17,17 +22,26 @@
     "backgroundColor": "#fff",
     "list": [
       {
-        "pagePath": "pages/logs/logs",
-        "text": "福利",
-        "iconPath": "imgs/icons/star.png",
-        "selectedIconPath": "imgs/icons/star-selected.png"
+        "pagePath": "pages/about/home/home",
+        "text": "关于",
+        "iconPath": "imgs/icons/pluto.png",
+        "selectedIconPath": "imgs/icons/pluto-selected.png"
       },
       {
         "pagePath": "pages/music/music",
         "text": "音乐",
         "iconPath": "imgs/icons/moon-dreamy.png",
         "selectedIconPath": "imgs/icons/moon-dreamy-selected.png"
+      },
+      {
+        "pagePath": "pages/about/home/home",
+        "text": "关于",
+        "iconPath": "imgs/icons/pluto.png",
+        "selectedIconPath": "imgs/icons/pluto-selected.png"
       }
     ]
+  },
+  "usingComponents": {
+    "cu-custom": "/colorui/components/cu-custom"
   }
 }

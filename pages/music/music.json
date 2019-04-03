@@ -6,6 +6,6 @@
   "backgroundColor": "#eeeeee",
   "backgroundTextStyle": "light",
   "usingComponents": {
-    "nav": "/pages/nav/nav"
+    
   }
 } 

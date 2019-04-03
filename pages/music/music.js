@@ -1,53 +1,65 @@
 // pages/music/music.js
 const uitl = require("../../utils/util.js")
 Page({
-  
+
   /**
    * 页面的初始数据
    */
   data: {
+    //nav
+    TabCur: 1,
+    scrollLeft: 0,
+    // 加载框
+    loadModal: false,
+    
     innerAudioContext: null,
-    urlList: ["http://ws.stream.qqmusic.qq.com/C400000btw1z1NPZtB.m4a?fromtag=64&guid=126548448&vkey=9AA464B102331F31FE02DB9D5AE1F68885F326FB3A8039160AEF75AD41209F168BA38EF200E67624B7C5B34BE40F178972E01234F7B46823","http://ws.stream.qqmusic.qq.com/M500001VfvsJ21xFqb.mp3?guid=ffffffff82def4af4b12b3cd9337d5e7&uin=346897220&vkey=6292F51E1E384E061FF02C31F716658E5C81F5594D561F2E88B854E81CAAB7806D5E4F103E55D33C16F3FAC506D1AB172DE8600B37E43FAD&fromtag=46"],
+    urlList: ["http://ws.stream.qqmusic.qq.com/C400000btw1z1NPZtB.m4a?fromtag=64&guid=126548448&vkey=9AA464B102331F31FE02DB9D5AE1F68885F326FB3A8039160AEF75AD41209F168BA38EF200E67624B7C5B34BE40F178972E01234F7B46823", "http://ws.stream.qqmusic.qq.com/M500001VfvsJ21xFqb.mp3?guid=ffffffff82def4af4b12b3cd9337d5e7&uin=346897220&vkey=6292F51E1E384E061FF02C31F716658E5C81F5594D561F2E88B854E81CAAB7806D5E4F103E55D33C16F3FAC506D1AB172DE8600B37E43FAD&fromtag=46"],
     audioPlayT: "播放",
     audioPauseT: "暂停",
-    currentTime: 0,
-    currentTimeText: "00:00",
-    duration: 0,
-    isplay: true,
-    playType: 'single',
+    currentTime: 0, //当前播放时间点
+    currentTimeText: "00:00", //歌曲时长格式
+    duration: 0, //歌曲时长
+    isplay: true, //是否在播放
+    playType: 'single', //播放模式：single 单曲循环/
     searchData: {
       'musicName': ''
-    },
-    songList: [],
-    searchList: [],
-    poster: 'https://ws1.sinaimg.cn/large/610dc034ly1fhgsi7mqa9j20ku0kuh1r.jpg'
+    }, //搜索信息
+    songList: [], // 歌曲列表 top100
+    searchList: [], //搜索列表 前100
+    poster: 'https://ws1.sinaimg.cn/large/610dc034ly1fhgsi7mqa9j20ku0kuh1r.jpg' //封面图
   },
+  tabSelect(e) {
+    this.setData({
+      TabCur: e.currentTarget.dataset.id,
+      scrollLeft: (e.currentTarget.dataset.id - 1) * 60
+    })
+  }, //nav事件
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
     let that = this;
   },
-  onAudioPlay: function () {
+  onAudioPlay: function() {
     this.data.innerAudioContext.play();
     this.setData({
       isplay: false
     })
   },
-  onAudioPause: function () {
+  onAudioPause: function() {
     this.data.innerAudioContext.pause();
     this.setData({
       isplay: true
     })
   },
-  changeTime: function (e) {
+  changeTime: function(e) {
     this.data.innerAudioContext.seek(Math.floor(e.detail.value));
     this.data.innerAudioContext.play();
     this.setData({
       isplay: false
     })
   },
-  changingT: function (e) {
+  changingT: function(e) {
     this.data.innerAudioContext.pause();
     this.setData({
       isplay: true
@@ -59,8 +71,12 @@ Page({
       'searchData.musicName': event.detail.value
     })
   },
-  searchMusic: function () {
+  searchMusic: function() {
     let that = this;
+    that.setData({
+        loadModal: true
+      })
+    
     let param = {
       key: 579621905,
       limit: 100,
@@ -77,17 +93,17 @@ Page({
       },
       success: function(res) {
         that.setData({
-          searchList: res.data.data
+          searchList: res.data.data,
+          loadModal: false
         })
-
       }
     })
   },
   // 搜索出来的歌点播
-  searchSinglePlay: function (event) {
+  searchSinglePlay: function(event) {
     let that = this;
     let musicData = event.currentTarget.dataset.music;
-    
+
     that.setData({
       urlList: [musicData.url],
       poster: musicData.pic,
@@ -99,16 +115,16 @@ Page({
     audioInit(that, that.data.urlList[0]);
     that.onAudioPlay();
   },
-  flagMusicPlay: function (event) {
-    let that = this;  
+  flagMusicPlay: function(event) {
+    let that = this;
     let musicData = event.currentTarget.dataset.music.data;
     that.initPlay(musicData)
   },
-  initPlay: function (musicData) {
+  initPlay: function(musicData) {
     // 通过歌曲信息获取歌曲播放地址和poster地址。
     // 必要信息：songmid， filename
     var that = this;
-    
+
     // 描述 musicData.albumdesc
     // 名字 musicData.albumname
     // id musicData.albumid
@@ -119,7 +135,7 @@ Page({
     that.setData({
       poster: "https://imgcache.qq.com/music/photo/album_300/" + (id % 100) + "/300_albumpic_" + id + "_0.jpg"
     })
-    
+
     // songmid musicData.songmid
     var songmid = musicData.songmid;
     var filename = 'C400' + songmid + '.m4a'
@@ -129,7 +145,7 @@ Page({
       header: {
         "Content-Type": "application/json"
       },
-      success: function (res) {
+      success: function(res) {
         var vkey = res.data.data.items[0].vkey;
         var songurl = 'https://ws.stream.qqmusic.qq.com/' + filename + '?fromtag=64&guid=126548448&vkey=' + vkey;
         that.setData({
@@ -144,11 +160,11 @@ Page({
       }
     })
   },
-  
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady: function() {
     var that = this;
     //初始化播放
     audioInit(that, that.data.urlList[0]);
@@ -158,63 +174,63 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
+  onShow: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
+  onHide: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
+  onUnload: function() {
 
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
+  onPullDownRefresh: function() {
 
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
+  onReachBottom: function() {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function() {
 
   }
 
 })
 
 
-const audioInit = (that, url)=> {
+const audioInit = (that, url) => {
   that.data.innerAudioContext = wx.createInnerAudioContext();
   that.data.innerAudioContext.src = url;
   that.data.innerAudioContext.autoplay = false
-  
+
   that.data.innerAudioContext.onCanplay(() => {
     that.data.innerAudioContext.duration;
-    setTimeout(()=> {
+    setTimeout(() => {
       that.setData({
         duration: Math.floor(that.data.innerAudioContext.duration)
       })
     }, 300)
   })
-  that.data.innerAudioContext.onPlay(() => { 
-    
+  that.data.innerAudioContext.onPlay(() => {
+
   })
   that.data.innerAudioContext.onStop(() => {
     console.log('i am onStop')
@@ -257,11 +273,10 @@ const getQMusic = (that) => {
       "Content-Type": "application/json"
     },
     success: function(res) {
-        that.setData({
-          songList: res.data.songlist
-        })
+      that.setData({
+        songList: res.data.songlist
+      })
       that.initPlay(that.data.songList[0].data)
     }
   })
 }
-

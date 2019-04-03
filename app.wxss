@@ -1,5 +1,7 @@
 /**app.wxss**/
-@import "./component/nav/nav.wxss";
+@import "colorui/main.wxss";
+@import "colorui/icon.wxss";
+@import "component/nav/nav.wxss";
 .container {
   height: 100%;
   display: flex;
@@ -53,10 +55,10 @@
     text-align: center;
 }
 
-input{
+/* input{
     padding: 10px 15px;
     background-color: #fff;
-}
+} */
 checkbox, radio{
     margin-right: 5px;
 }
@@ -172,6 +174,9 @@ height: 150rpx;
 }
 .h200 {
 height: 400rpx;
+}
+.h300 {
+height: 600rpx;
 }
 .lh40{
   line-height: 80rpx;
