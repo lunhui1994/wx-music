@@ -1,18 +1,19 @@
 <!--pages/music/music.wxml-->
 <!-- <nav></nav> -->
 <!-- <text>pages/music/music.wxml</text> -->
-<block class='padding bg-white h100p'>
+<block>
   <view class="padding bg-white bg-gradual-green">
     <view class="basis-lg margin-xs padding-sm radius">
       <view class="padding text-center text-df">
-        <text class="text-Abc">歌名</text>
+        <text class="text-Abc">{{songData.name + ' ------ ' + songData.singer }}</text>
       </view>
       <view class='music_poster mar0_a'>
         <image class="{{isplay == false ? 'an' : ''}}" id="pic" src='{{poster}}'></image>
       </view>
     </view>
   </view>
-  <view class="timeBox marT50 section_gap playCtr">
+  <!-- 播放器 -->
+  <view class="timeBox bg-gradual-green section_gap playCtr">
     <view class='timePlay fl'>
       <view bindtap='onAudioPlay' wx:if="{{isplay}}">
         <image class='w40 h40' src='/imgs/icons/play.png'></image>
@@ -26,7 +27,7 @@
         <slider bindchanging="changingT" bindchange="changeTime" step="1" value='{{currentTime}}' min='0' max='{{duration}}' block-size='16' left-icon="cancel" right-icon="success_no_circle" />
       </view>
     </view>
-    <view class='fl gray h40 lh40'>
+    <view class='fl fc_f h40 lh40'>
       {{currentTimeText}}
     </view>
   </view>
@@ -38,11 +39,14 @@
       <text class="icon-upstagefill"></text> 排行榜
     </view>
     <view class="cu-item {{2==TabCur?'text-white cur':''}}" bindtap="tabSelect" data-id="2">
-      <text class="icon-clothesfill"></text> 歌曲
+      <text class="icon-upstage"></text> jayChou
+    </view>
+    <view class="cu-item {{3==TabCur?'text-white cur':''}}" bindtap="tabSelect" data-id="3">
+      <text class="icon-clothesfill"></text> 歌词
     </view>
   </scroll-view>
   <!-- search -->
-  <view class="padding bg-white" hidden="{{TabCur!=0}}">
+  <view class="padB_80 padding bg-white" hidden="{{TabCur!=0}}">
     <form>
       <view class="cu-form-group">
         <view class="title">歌曲搜索：</view>
@@ -52,21 +56,32 @@
     </form>
     <!-- searchlist -->
     <scroll-view scroll-y class='bg-green padding radius text-center shadow-blur light h200' wx:if="{{searchList.length}}">
-      <view bindtap='searchSinglePlay' wx:for="{{searchList}}" wx:key="id" data-music="{{song}}" wx:for-item="song" class="lh28 db fs_14">{{song.name}}----{{song.singer}}</view>
+      <view bindtap='searchSinglePlay' wx:for="{{searchList}}" wx:key="id" data-musicIndex="{{index}}" data-music="{{song}}" wx:for-item="song" class="lh28 db fs_14">{{song.name}}----{{song.singer}}</view>
     </scroll-view>
   </view>
   <!-- songs list -->
-  <view class="padding bg-white" hidden="{{TabCur!=1}}">
-    <view class="weui-cells">
-      <view class="padding-xs d_in" wx:key="cur_count" bindtap='flagMusicPlay' data-music="{{item}}" wx:for="{{songList}}" wx:key>
-        <view class="cu-tag line-green radius">{{item.data.albumname}}</view>
-      </view>
+  <view class="padding bg-white padB_80" hidden="{{TabCur!=1}}">
+    <view class="padding-xs d_in" wx:key="cur_count" bindtap='flagMusicPlay' data-music="{{item}}" wx:for="{{songList}}" wx:key>
+      <view class="cu-tag line-green radius">{{item.data.albumname}}</view>
+    </view>
+  </view>
+  <!-- jayChou list -->
+  <view class="padB_80 padding bg-white" hidden="{{TabCur!=2}}">
+    <view class="cu-form-group margin-top">
+      <view class="title">开启jaychou循环模式</view>
+      <switch bindchange='jaySwicth'></switch>
+    </view>
+    <view class="padding-xs d_in" wx:key="id" bindtap='jaySinglePlay' data-music="{{jay}}" data-musicIndex="{{index}}" wx:for="{{jayList}}" wx:for-item="jay" wx:key>
+      <view class="cu-tag line-green radius">{{jay.name}}</view>
     </view>
   </view>
   <!-- song detail -->
-  <view class="bg-green padding radius text-center shadow-blur light h300" hidden="{{TabCur!=2}}">
-    
-  </view>
+  <scroll-view scroll-y class="padB_80 bg-green padding radius shadow-blur light h300" hidden="{{TabCur!=3}}">
+    <text class='w100p lh40'>
+      {{songData.lrcContext}}
+    </text>
+  </scroll-view>
+
 </block>
 
 <view class='cu-load load-modal' wx:if="{{loadModal}}">

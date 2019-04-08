@@ -205,6 +205,9 @@ height: 600rpx;
 .pad05 {
   padding: 0 10rpx;
 }
+.padB_80 {
+  padding-bottom: 160rpx!important;
+}
 .o_hi {
   overflow: hidden;
 }

@@ -22,10 +22,10 @@
     "backgroundColor": "#fff",
     "list": [
       {
-        "pagePath": "pages/about/home/home",
-        "text": "关于",
-        "iconPath": "imgs/icons/pluto.png",
-        "selectedIconPath": "imgs/icons/pluto-selected.png"
+        "pagePath": "pages/meizi/meizi",
+        "text": "福利",
+        "iconPath": "imgs/icons/star.png",
+        "selectedIconPath": "imgs/icons/star-selected.png"
       },
       {
         "pagePath": "pages/music/music",
@@ -43,5 +43,8 @@
   },
   "usingComponents": {
     "cu-custom": "/colorui/components/cu-custom"
-  }
+  },
+  "requiredBackgroundModes": [
+    "audio"
+  ]
 }
