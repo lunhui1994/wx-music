@@ -2,7 +2,7 @@
 <!-- <nav></nav> -->
 <!-- <text>pages/music/music.wxml</text> -->
 <block>
-  <view class="padding bg-white bg-gradual-green" hidden="{{TabCur!=3 && TabCur!=0}}">
+  <view class="padding bg-white bg-gradual-green" hidden="{{TabCur!=3}}">
     <view class="padding text-center text-df">
       <text class="text-Abc">{{songData.name + ' ------ ' + songData.singer }}</text>
     </view>
@@ -84,7 +84,7 @@
     <view hidden="{{!loadModal}}" class="bg-white flex-sub radius shadow-lg">
       <image src="https://image.weilanwl.com/gif/loading-white.gif" mode="aspectFit" class="gif-white response" style="height:240rpx"></image>
     </view>
-    <scroll-view hidden="{{loadModal || !searchList.length}}" scroll-y class='bg-green padding radius text-center shadow-blur light h200'>
+    <scroll-view hidden="{{loadModal || !searchList.length}}" scroll-y class='bg-yellow padding radius text-center shadow-blur light h300'>
       <view bindtap='searchSinglePlay' wx:for="{{searchList}}" wx:key="id" data-musicIndex="{{index}}" data-music="{{song}}" wx:for-item="song" class="lh28 db fs_14">{{song.name}}----{{song.singer}}</view>
     </scroll-view>
   </view>

@@ -29,6 +29,9 @@ Page({
           userInfo: res.userInfo,
           hasUserInfo: true 
         })
+        wx.switchTab({
+          url: '../music/music'
+        })
       }
     } else {
       // 在没有 open-type=getUserInfo 版本的兼容处理
@@ -38,6 +41,9 @@ Page({
           this.setData({
             userInfo: res.userInfo,
             hasUserInfo: true
+          })
+          wx.switchTab({
+            url: '../music/music'
           })
         }
       })

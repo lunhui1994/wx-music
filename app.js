@@ -35,6 +35,18 @@ App({
   },
   globalData: {
     userInfo: null
+  },
+  service: {
+    rq : function (queryStr, data, callback) {
+      let rqData = {
+        url: queryStr,
+        method: data.method
+      };
+      data.data && (rqData.data = data.data);
+      data.url && (rqData.url += data.url);
+      rqData.success = callback;
+      wx.request(rqData);
+    }
   }
 })
 

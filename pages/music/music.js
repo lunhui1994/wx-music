@@ -1,5 +1,6 @@
 // pages/music/music.js
-const uitl = require("../../utils/util.js")
+const uitl = require("../../utils/util.js");
+const api_tencent = uitl.interface.tencent;
 Page({
 
   /**
@@ -12,13 +13,13 @@ Page({
     //当前播放歌曲信息
     songData: {
       id: "0039MnYb0qxYhV",
-      lrc: "https://api.bzqll.com/music/tencent/lrc?id=0039MnYb0qxYhV&key=579621905",
+      lrc: api_tencent + "lrc?id=0039MnYb0qxYhV&key=579621905",
       lrcContext: "",
       name: "晴天",
-      pic: "https://api.bzqll.com/music/tencent/pic?id=0039MnYb0qxYhV&key=579621905",
+      pic: api_tencent + "pic?id=0039MnYb0qxYhV&key=579621905",
       singer: "周杰伦",
       time: 269,
-      url: "https://api.bzqll.com/music/tencent/url?id=0039MnYb0qxYhV&key=579621905",
+      url: api_tencent + "url?id=0039MnYb0qxYhV&key=579621905",
       index: 0
     },
     // 加载框
@@ -26,7 +27,7 @@ Page({
 
     innerAudioContext: null,
     backgroundAudioManager: null,
-    urlList: ["https://api.bzqll.com/music/tencent/url?id=0039MnYb0qxYhV&key=579621905"],
+    urlList: [api_tencent + "url?id=0039MnYb0qxYhV&key=579621905"],
     audioPlayT: "播放",
     audioPauseT: "暂停",
     currentTime: 0, //当前播放时间点
@@ -50,8 +51,8 @@ Page({
     }, //搜索信息
     songList: [], // 歌曲列表 top100
     searchList: [], //搜索列表 前100
-    jayList: [], //jaychou 60
-    poster: 'https://api.bzqll.com/music/tencent/pic?id=0039MnYb0qxYhV&key=579621905' //封面图
+    jayList: [], //jaychou 前60
+    poster: api_tencent + 'pic?id=0039MnYb0qxYhV&key=579621905' //封面图
   },
   PickerChange(e) {
     let that = this;
@@ -69,7 +70,6 @@ Page({
   //歌曲条件选择多选事件
   MultiColumnChange(e) {
     let that = this;
-    console.log(e.detail);
     let data = {
       multiArray: this.data.multiArray,
       multiIndex: this.data.multiIndex
@@ -182,18 +182,19 @@ Page({
       loadModal: true
     })
     let param = {
-      key: 579621905,
-      limit: 100,
-      offset: 0,
+      format: 1,
+      pageSize: 100,
+      page: 0,
       type: that.data.searchData.type,
-      s: that.data.searchData.musicName
+      keyword: that.data.searchData.musicName
     }
-    let url = "https://api.bzqll.com/music/" + that.data.searchData.source +"/search" + uitl.json2str(param);
-    // https://api.bzqll.com/music/tencent/search?key=579621905&s=123&limit=100&offset=0&type=song
+    let url = api_tencent +"search" + uitl.json2str(param);
+    // https://v1.itooi.cn/tencent/search?key=579621905&s=123&limit=100&offset=0&type=song
     wx.request({
       url: url,
+      method: 'GET',
       header: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/x-www-form-urlencoded"
       },
       success: function(res) {
         let list = res.data.data;
@@ -248,9 +249,9 @@ Page({
     // songmid musicData.songmid
     var songmid = musicData.songmid;
     var filename = 'C400' + songmid + '.m4a'
-    // https://api.bzqll.com/music/tencent/url?key=579621905&id=001fXNWa3t8EQQ&br=192
+    // https://v1.itooi.cn/tencent/url?key=579621905&id=001fXNWa3t8EQQ&br=192
 
-    var songurl = 'https://api.bzqll.com/music/tencent/url?key=579621905&id=' + songmid + '&br=192';
+    var songurl = 'https://v1.itooi.cn/tencent/url?key=579621905&id=' + songmid + '&br=192';
     that.setData({
       urlList: [songurl],
       isplay: true,
@@ -258,9 +259,9 @@ Page({
       currentTimeText: "00:00",
       songData: {
         id: songmid,
-        lrc: "https://api.bzqll.com/music/tencent/lrc?key=579621905&id=" + songmid,
+        lrc: "https://v1.itooi.cn/tencent/lrc?key=579621905&id=" + songmid,
         name: musicData.songname,
-        pic: "https://api.bzqll.com/music/tencent/pic?key=579621905&id=" + songmid,
+        pic: "https://v1.itooi.cn/tencent/pic?key=579621905&id=" + songmid,
         singer: musicData.singer[0].name,
         time: musicData.interval,
         url: songurl
@@ -404,13 +405,13 @@ const audioInit = (that, url) => {
 const audioBackInit = (that, url) => {
   that.data.backgroundAudioManager = wx.getBackgroundAudioManager();
   // id: "0039MnYb0qxYhV",
-  // lrc: "https://api.bzqll.com/music/tencent/lrc?id=0039MnYb0qxYhV&key=579621905",
+  // lrc: "https://v1.itooi.cn/music/tencent/lrc?id=0039MnYb0qxYhV&key=579621905",
   // lrcContext: "",
   // name: "晴天",
-  // pic: "https://api.bzqll.com/music/tencent/pic?id=0039MnYb0qxYhV&key=579621905",
+  // pic: "https://v1.itooi.cn/music/tencent/pic?id=0039MnYb0qxYhV&key=579621905",
   // singer: "周杰伦",
   // time: 269,
-  // url: "https://api.bzqll.com/music/tencent/url?id=0039MnYb0qxYhV&key=579621905",
+  // url: "https://v1.itooi.cn/music/tencent/url?id=0039MnYb0qxYhV&key=579621905",
   // index: 0
   that.data.backgroundAudioManager.src = url;
   that.data.backgroundAudioManager.title = that.data.songData.name;
@@ -493,9 +494,9 @@ const getQMusic = (that) => {
 
 const getQjayChou = (that) => {
   wx.request({
-    url: "https://api.bzqll.com/music/tencent/search?key=579621905&s='周杰伦'&limit=100&offset=0&type=song",
+    url: api_tencent + "search?keyword='周杰伦'&type=song&pageSize=100&page=0&format=1",
     header: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/x-www-form-urlencoded"
     },
     success: function(res) {
       let list = res.data.data;
@@ -542,7 +543,7 @@ const getLrc = (that, url) => {
   wx.request({
     url: url,
     header: {
-      'Content-Type': 'text/plain'
+      'Content-Type': 'application/x-www-form-urlencoded'
     },
     success: function(res) {
       that.setData({

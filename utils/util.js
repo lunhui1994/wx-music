@@ -41,11 +41,23 @@ function json2str(json) {
   num && (str = '?' + str);
   return str;
 }
+
+const _Api = {
+  music: 'https://v1.itooi.cn/'
+}
+
+const _Interface = {
+  tencent: _Api.music + 'tencent/'
+}
+
 let fn = {
   formatTime: formatTime,
   sTt: sTt,
   padding: padding,
-  json2str: json2str
+  json2str: json2str,
+  api: _Api,
+  interface: _Interface
 }
+
 module.exports = fn;
 
