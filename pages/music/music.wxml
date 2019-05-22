@@ -2,14 +2,12 @@
 <!-- <nav></nav> -->
 <!-- <text>pages/music/music.wxml</text> -->
 <block>
-  <view class="padding bg-white bg-gradual-green">
-    <view class="basis-lg margin-xs padding-sm radius">
-      <view class="padding text-center text-df">
-        <text class="text-Abc">{{songData.name + ' ------ ' + songData.singer }}</text>
-      </view>
-      <view class='music_poster mar0_a'>
-        <image class="{{isplay == false ? 'an' : ''}}" id="pic" src='{{poster}}'></image>
-      </view>
+  <view class="padding bg-white bg-gradual-green" hidden="{{TabCur!=3 && TabCur!=0}}">
+    <view class="padding text-center text-df">
+      <text class="text-Abc">{{songData.name + ' ------ ' + songData.singer }}</text>
+    </view>
+    <view class='music_poster mar0_a'>
+      <image class="{{isplay == false ? 'an' : ''}}" id="pic" src='{{poster}}'></image>
     </view>
   </view>
   <!-- 播放器 -->
@@ -49,13 +47,44 @@
   <view class="padB_80 padding bg-white" hidden="{{TabCur!=0}}">
     <form>
       <view class="cu-form-group">
+        <view class="title">多列选择</view>
+        <picker mode="multiSelector" bindchange="MultiChange" bindcolumnchange="MultiColumnChange" value="{{multiIndex}}" range="{{multiArray}}">
+          <view class="picker">
+            {{multiArray[0][multiIndex[0]]}}，{{multiArray[1][multiIndex[1]]}}
+          </view>
+        </picker>
+      </view>
+      
+      <!-- <view class="flex solid-bottom padding justify-around">
+        <view class="bg-orange padding-sm margin-xs radius">
+          <view class="title">类型：</view>
+          <picker class="flex-sub text-center" bindchange="PickerChange" value="{{index}}" range="{{picker}}">
+            <view class="picker">
+              {{index?picker[index]:'搜索类型：默认歌曲名'}}
+            </view>
+          </picker>
+        </view>
+        <view class="bg-yellow padding-sm margin-xs radius">
+          <view class="title">来源：</view>
+          <picker class="flex-sub text-center" bindchange="PickerChange" value="{{index}}" range="{{picker}}">
+            <view class="picker">
+              {{index?picker[index]:'搜索来源：默认QQ'}}
+            </view>
+          </picker>
+        </view>
+      </view> -->
+
+      <view class="cu-form-group">
         <view class="title">歌曲搜索：</view>
-        <input placeholder='输入你喜欢的歌曲名称' bindinput='searchNameFn'></input>
-        <button bindtap='searchMusic' class="cu-btn bg-green shadow">搜索</button>
+        <input placeholder='名称' bindinput='searchNameFn'></input>
+        <button bindtap='searchMusic' class=" cu-btn bg-green shadow">搜索</button>
       </view>
     </form>
     <!-- searchlist -->
-    <scroll-view scroll-y class='bg-green padding radius text-center shadow-blur light h200' wx:if="{{searchList.length}}">
+    <view hidden="{{!loadModal}}" class="bg-white flex-sub radius shadow-lg">
+      <image src="https://image.weilanwl.com/gif/loading-white.gif" mode="aspectFit" class="gif-white response" style="height:240rpx"></image>
+    </view>
+    <scroll-view hidden="{{loadModal || !searchList.length}}" scroll-y class='bg-green padding radius text-center shadow-blur light h200'>
       <view bindtap='searchSinglePlay' wx:for="{{searchList}}" wx:key="id" data-musicIndex="{{index}}" data-music="{{song}}" wx:for-item="song" class="lh28 db fs_14">{{song.name}}----{{song.singer}}</view>
     </scroll-view>
   </view>
@@ -84,7 +113,7 @@
 
 </block>
 
-<view class='cu-load load-modal' wx:if="{{loadModal}}">
+<!-- <view class='cu-load load-modal' wx:if="{{loadModal}}">
   <view class="cu-avatar round png" mode="aspectFit" style="background-image:url(/imgs/logo.png);"></view>
   <view class='gray-text'>加载中...</view>
-</view>
+</view> -->

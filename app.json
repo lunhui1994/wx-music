@@ -2,13 +2,13 @@
   "pages": [
     "pages/index/index",
     "pages/logs/logs",
-    "pages/meizi/meizi",
     "pages/music/music",
     "pages/about/about/about",
     "pages/about/log/log",
     "pages/about/test/list",
     "pages/about/test/filter",
-    "pages/about/home/home"
+    "pages/about/home/home",
+    "pages/meizi/meizi"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "福利",
+  "enablePullDownRefresh": true,
+  "navigationBarBackgroundColor": "#F85999",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#eeeeee",
+  "backgroundTextStyle": "light"
+}

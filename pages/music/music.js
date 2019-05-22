@@ -32,18 +32,94 @@ Page({
     currentTime: 0, //当前播放时间点
     currentTimeText: "00:00", //歌曲时长格式
     duration: 0, //歌曲时长
-    isplay: true, //是否在播放
+    isplay: false, //是否在播放
     playType: 'single', //播放模式：single 单曲循环/
+
+    // typePickerName: ['歌名', '专辑', '歌单', 'MV', '用户', '歌词'], // 搜索种类名称
+    // typePicker: ['song', 'album', 'list', 'mv', 'user', 'lrc'], // 搜索种类
+
+    multiArray: [
+      ['QQ音乐'], //['QQ音乐', '网易云', '酷狗']
+      ['歌名'] //['歌名', '专辑', '歌单', 'MV', '用户', '歌词']
+    ],
+    multiIndex: [0, 0],
     searchData: {
-      'musicName': ''
+      'musicName': '',
+      type: "song",
+      source: "tencent"
     }, //搜索信息
     songList: [], // 歌曲列表 top100
     searchList: [], //搜索列表 前100
     jayList: [], //jaychou 60
     poster: 'https://api.bzqll.com/music/tencent/pic?id=0039MnYb0qxYhV&key=579621905' //封面图
   },
-
-
+  PickerChange(e) {
+    let that = this;
+    this.setData({
+      index: e.detail.value
+    })
+  },
+  // 歌曲条件
+  MultiChange(e) {
+    let that = this;
+    this.setData({
+      multiIndex: e.detail.value
+    })
+  },
+  //歌曲条件选择多选事件
+  MultiColumnChange(e) {
+    let that = this;
+    console.log(e.detail);
+    let data = {
+      multiArray: this.data.multiArray,
+      multiIndex: this.data.multiIndex
+    };
+    let source = "tencent";
+    let type = "song";
+    data.multiIndex[e.detail.column] = e.detail.value;
+    switch (e.detail.column) {
+      case 0:
+        switch (data.multiIndex[0]) {
+          case 0:
+            data.multiArray[1] = ['歌名']; //['歌名', '专辑', '歌单', 'MV', '用户', '歌词']
+            source = 'tencent';
+            break;
+          case 1:
+            data.multiArray[1] = ['歌名']; //['歌名', '专辑', '歌单', 'MV', '用户', '歌词', '歌手', '电台']
+            source = 'netease';
+            break;
+        }
+        data.multiIndex[1] = 0;
+        break;
+      case 1:
+        switch (data.multiIndex[1]) {
+          case 0:
+            type = "song";
+            break;
+          case 1:
+            type = "album";
+            break;
+          case 2:
+            type = "list";
+            break;
+          case 3:
+            type = "mv";
+            break;
+          case 4:
+            type = "user";
+            break;
+          case 5:
+              type = "lrc";
+            break;
+        }
+        break;
+    }
+    that.setData({
+      'searchData.source': source,
+      'searchData.type': type
+    });
+    that.setData(data);
+  },
   tabSelect(e) {
     this.setData({
       TabCur: e.currentTarget.dataset.id,
@@ -105,15 +181,14 @@ Page({
     that.setData({
       loadModal: true
     })
-
     let param = {
       key: 579621905,
       limit: 100,
       offset: 0,
-      type: 'song',
+      type: that.data.searchData.type,
       s: that.data.searchData.musicName
     }
-    let url = "https://api.bzqll.com/music/tencent/search" + uitl.json2str(param);
+    let url = "https://api.bzqll.com/music/" + that.data.searchData.source +"/search" + uitl.json2str(param);
     // https://api.bzqll.com/music/tencent/search?key=579621905&s=123&limit=100&offset=0&type=song
     wx.request({
       url: url,
@@ -135,13 +210,12 @@ Page({
   },
   // 搜索出来的歌点播
   searchSinglePlay: function(event) {
-
     let data = event.currentTarget.dataset;
     let that = this;
     singlePlay(that, data);
     getLrc(that, that.data.songData.lrc);
   },
-//周董歌曲点播
+  //周董歌曲点播
   jaySinglePlay: function(event) {
     let data = event.currentTarget.dataset;
     let that = this;
@@ -154,7 +228,7 @@ Page({
     let musicData = event.currentTarget.dataset.music.data;
     that.initPlay(musicData)
   },
-// 初始化播放
+  // 初始化播放
   initPlay: function(musicData) {
     // 通过歌曲信息获取歌曲播放地址和poster地址。
     // 必要信息：songmid， filename
@@ -329,16 +403,16 @@ const audioInit = (that, url) => {
 // 背景播放 初始化音频组件 this ，歌曲地址
 const audioBackInit = (that, url) => {
   that.data.backgroundAudioManager = wx.getBackgroundAudioManager();
-  that.data.backgroundAudioManager.src = url;
   // id: "0039MnYb0qxYhV",
-  //   lrc: "https://api.bzqll.com/music/tencent/lrc?id=0039MnYb0qxYhV&key=579621905",
-  //     lrcContext: "",
-  //       name: "晴天",
-  //         pic: "https://api.bzqll.com/music/tencent/pic?id=0039MnYb0qxYhV&key=579621905",
-  //           singer: "周杰伦",
-  //             time: 269,
-  //               url: "https://api.bzqll.com/music/tencent/url?id=0039MnYb0qxYhV&key=579621905",
-  //                 index: 0
+  // lrc: "https://api.bzqll.com/music/tencent/lrc?id=0039MnYb0qxYhV&key=579621905",
+  // lrcContext: "",
+  // name: "晴天",
+  // pic: "https://api.bzqll.com/music/tencent/pic?id=0039MnYb0qxYhV&key=579621905",
+  // singer: "周杰伦",
+  // time: 269,
+  // url: "https://api.bzqll.com/music/tencent/url?id=0039MnYb0qxYhV&key=579621905",
+  // index: 0
+  that.data.backgroundAudioManager.src = url;
   that.data.backgroundAudioManager.title = that.data.songData.name;
   that.data.backgroundAudioManager.coverImgUrl = that.data.songData.pic;
   that.data.backgroundAudioManager.singer = that.data.songData.singer;
