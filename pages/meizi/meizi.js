@@ -88,8 +88,8 @@ Page({
 var myPage = 1;
 
 function findMeiZhi(that, targetPage) {
-    // var BASE_URL= "https://gank.io/api/";
-    var BASE_URL = "https://www.zsfmyz.top:8080/api/";
+    var BASE_URL= "https://gank.io/api/";
+    // var BASE_URL = "https://www.zsfmyz.top:8080/api/";
     var MEIZHI_URL = BASE_URL.concat("data/福利/50/");
   wx.request({
     url: encodeURI(MEIZHI_URL.concat(targetPage)), //手动用encodeURI对url进行转码，小程序不自动转码

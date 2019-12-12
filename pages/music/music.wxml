@@ -22,13 +22,14 @@
     </view>
     <view class="fl w250">
       <view class="body-view">
-        <slider bindchanging="changingT" bindchange="changeTime" step="1" value='{{currentTime}}' min='0' max='{{duration}}' block-size='16' left-icon="cancel" right-icon="success_no_circle" />
+        <slider bindchanging="changingT" bindchange="changeTime" step="1" value='{{currentTime}}' min='0' max='{{duration}}' block-size='16' left-icon="cancel" right-icon="success_no_circle"/>
       </view>
     </view>
     <view class='fl fc_f h40 lh40'>
       {{currentTimeText}}
     </view>
   </view>
+  <!-- 播放器 end -->
   <scroll-view scroll-x class="bg-green nav text-center">
     <view class="cu-item {{0==TabCur?'text-white cur':''}}" bindtap="tabSelect" data-id="0">
       <text class="icon-camerafill"></text> 搜索
@@ -90,8 +91,8 @@
   </view>
   <!-- songs list -->
   <view class="padding bg-white padB_80" hidden="{{TabCur!=1}}">
-    <view class="padding-xs d_in" wx:key="cur_count" bindtap='flagMusicPlay' data-music="{{item}}" wx:for="{{songList}}" wx:key>
-      <view class="cu-tag line-green radius">{{item.data.albumname}}</view>
+    <view class="padding-xs d_in w100p" wx:key="cur_count" bindtap='jaySinglePlay' data-music="{{item}}" wx:for="{{songList}}">
+      <view class="cu-tag line-green radius w100p h40 lh40 j_l">{{item.name}}</view>
     </view>
   </view>
   <!-- jayChou list -->

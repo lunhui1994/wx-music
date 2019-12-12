@@ -185,6 +185,11 @@ height: 600rpx;
   line-height: 56rpx;
 }
 
+/* flex */
+.j_l {
+  justify-content: left; 
+}
+
 .bd_1_ccc{
   border: 1px solid #ccc;
 }

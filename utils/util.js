@@ -47,7 +47,10 @@ const _Api = {
 }
 
 const _Interface = {
-  tencent: _Api.music + 'tencent/'
+  tencent: _Api.music + 'tencent/',
+  kugou: _Api.music + 'kugou/',
+  migu: _Api.music + 'migu/',
+  netease: _Api.music + 'netease/',
 }
 
 let fn = {

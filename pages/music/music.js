@@ -1,6 +1,6 @@
 // pages/music/music.js
 const uitl = require("../../utils/util.js");
-const api_tencent = uitl.interface.tencent;
+const api_music = uitl.interface.netease; // kugou migu netease
 Page({
 
   /**
@@ -13,13 +13,13 @@ Page({
     //当前播放歌曲信息
     songData: {
       id: "0039MnYb0qxYhV",
-      lrc: api_tencent + "lrc?id=0039MnYb0qxYhV&key=579621905",
+      lrc: api_music + "lrc?id=0039MnYb0qxYhV&key=579621905",
       lrcContext: "",
       name: "晴天",
-      pic: api_tencent + "pic?id=0039MnYb0qxYhV&key=579621905",
+      pic: api_music + "pic?id=0039MnYb0qxYhV&key=579621905",
       singer: "周杰伦",
       time: 269,
-      url: api_tencent + "url?id=0039MnYb0qxYhV&key=579621905",
+      url: api_music + "url?id=0039MnYb0qxYhV&key=579621905",
       index: 0
     },
     // 加载框
@@ -27,7 +27,7 @@ Page({
 
     innerAudioContext: null,
     backgroundAudioManager: null,
-    urlList: [api_tencent + "url?id=0039MnYb0qxYhV&key=579621905"],
+    urlList: [api_music + "url?id=0039MnYb0qxYhV&key=579621905"],
     audioPlayT: "播放",
     audioPauseT: "暂停",
     currentTime: 0, //当前播放时间点
@@ -52,7 +52,7 @@ Page({
     songList: [], // 歌曲列表 top100
     searchList: [], //搜索列表 前100
     jayList: [], //jaychou 前60
-    poster: api_tencent + 'pic?id=0039MnYb0qxYhV&key=579621905' //封面图
+    poster: api_music + 'pic?id=0039MnYb0qxYhV&key=579621905' //封面图
   },
   PickerChange(e) {
     let that = this;
@@ -188,7 +188,7 @@ Page({
       type: that.data.searchData.type,
       keyword: that.data.searchData.musicName
     }
-    let url = api_tencent +"search" + uitl.json2str(param);
+    let url = api_music +"search" + uitl.json2str(param);
     // https://v1.itooi.cn/tencent/search?key=579621905&s=123&limit=100&offset=0&type=song
     wx.request({
       url: url,
@@ -223,13 +223,13 @@ Page({
     singlePlay(that, data);
     getLrc(that, that.data.songData.lrc);
   },
-  // 排行榜歌曲点播
+  // 排行榜歌曲点播 暂时废弃
   flagMusicPlay: function(event) {
     let that = this;
     let musicData = event.currentTarget.dataset.music.data;
     that.initPlay(musicData)
   },
-  // 初始化播放
+  // 初始化播放 暂时废弃
   initPlay: function(musicData) {
     // 通过歌曲信息获取歌曲播放地址和poster地址。
     // 必要信息：songmid， filename
@@ -476,17 +476,23 @@ const audioBackInit = (that, url) => {
 }
 
 
-
+// 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg?g_tk=5381&uin=0&format=json&inCharset=utf-8&outCharset=utf-8¬ice=0&platform=h5&needNewCode=1&tpl=3&page=detail&type=top&topid=27&_=1519963122923'
 //获取qq音乐top100榜单
 const getQMusic = (that) => {
   wx.request({
-    url: 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg?g_tk=5381&uin=0&format=json&inCharset=utf-8&outCharset=utf-8¬ice=0&platform=h5&needNewCode=1&tpl=3&page=detail&type=top&topid=27&_=1519963122923',
+    url: api_music + 'song/newest?pageSize=100&page=0&format=1',
     header: {
       "Content-Type": "application/json"
     },
-    success: function(res) {
+    success: function (res) {
+      let list = res.data.data;
+
+      for (let i = 0; i < list.length; i++) {
+        list[i].index = i;
+        list[i].lrcContext = '';
+      }
       that.setData({
-        songList: res.data.songlist
+        songList: list
       })
     }
   })
@@ -494,7 +500,7 @@ const getQMusic = (that) => {
 
 const getQjayChou = (that) => {
   wx.request({
-    url: api_tencent + "search?keyword='周杰伦'&type=song&pageSize=100&page=0&format=1",
+    url: api_music + "search?keyword='周杰伦'&type=song&pageSize=100&page=0&format=1",
     header: {
       "Content-Type": "application/x-www-form-urlencoded"
     },
