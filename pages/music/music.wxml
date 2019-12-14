@@ -86,13 +86,13 @@
       <image src="https://image.weilanwl.com/gif/loading-white.gif" mode="aspectFit" class="gif-white response" style="height:240rpx"></image>
     </view>
     <scroll-view hidden="{{loadModal || !searchList.length}}" scroll-y class='bg-yellow padding radius text-center shadow-blur light h300'>
-      <view bindtap='searchSinglePlay' wx:for="{{searchList}}" wx:key="id" data-musicIndex="{{index}}" data-music="{{song}}" wx:for-item="song" class="lh28 db fs_14">{{song.name}}----{{song.singer}}</view>
+      <view bindtap='searchSinglePlay' wx:for="{{searchList}}" wx:key="id" data-musicIndex="{{index}}" data-music="{{song}}" wx:for-item="song" class="lh28 db fs_14">{{song.songname}}----{{song.singer.name}}</view>
     </scroll-view>
   </view>
   <!-- songs list -->
   <view class="padding bg-white padB_80" hidden="{{TabCur!=1}}">
     <view class="padding-xs d_in w100p" wx:key="cur_count" bindtap='jaySinglePlay' data-music="{{item}}" wx:for="{{songList}}">
-      <view class="cu-tag line-green radius w100p h40 lh40 j_l">{{item.name}}</view>
+      <view class="cu-tag line-green radius w100p h40 lh40 j_l">{{item.songname}}</view>
     </view>
   </view>
   <!-- jayChou list -->
@@ -102,7 +102,7 @@
       <switch bindchange='jaySwicth'></switch>
     </view>
     <view class="padding-xs d_in" wx:key="id" bindtap='jaySinglePlay' data-music="{{jay}}" data-musicIndex="{{index}}" wx:for="{{jayList}}" wx:for-item="jay" wx:key>
-      <view class="cu-tag line-green radius">{{jay.name}}</view>
+      <view class="cu-tag line-green radius">{{jay.songname}}</view>
     </view>
   </view>
   <!-- song detail -->

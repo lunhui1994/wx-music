@@ -13,10 +13,10 @@ Page({
     //当前播放歌曲信息
     songData: {
       id: "0039MnYb0qxYhV",
-      // lrc: api_music + "lrc?id=0039MnYb0qxYhV&key=579621905",
-      // lrcContext: "",
-      name: "我是如此相信",
-      pic: "http://imgcache.qq.com/music/photo/album_300/9/300_albumpic_9612009_0.jpg",
+      lrc: api_music + "lrc?id=0039MnYb0qxYhV&key=579621905",
+      lrcContext: "",
+      name: "晴天",
+      pic: api_music + "pic?id=0039MnYb0qxYhV&key=579621905",
       singer: "周杰伦",
       time: 269,
       url: api_music + "url?id=0039MnYb0qxYhV&key=579621905",
@@ -45,7 +45,7 @@ Page({
     ],
     multiIndex: [0, 0],
     searchData: {
-      musicName: '',
+      'musicName': '',
       type: "song",
       source: "tencent"
     }, //搜索信息
@@ -182,11 +182,14 @@ Page({
       loadModal: true
     })
     let param = {
-      n: 30,
-      p: 1,
-      w: that.data.searchData.musicName
+      format: 1,
+      pageSize: 100,
+      page: 0,
+      type: that.data.searchData.type,
+      keyword: that.data.searchData.musicName
     }
-    let url = api_music +"list" + uitl.json2str(param);
+    let url = api_music +"search" + uitl.json2str(param);
+    // https://v1.itooi.cn/tencent/search?key=579621905&s=123&limit=100&offset=0&type=song
     wx.request({
       url: url,
       method: 'GET',
@@ -194,13 +197,11 @@ Page({
         "Content-Type": "application/x-www-form-urlencoded"
       },
       success: function(res) {
-        console.log(res);
-        let list = res.data.data.list;
+        let list = res.data.data;
         for (let i = 0; i < list.length; i++) {
           list[i].index = i;
           list[i].lrcContext = '';
         }
-        console.log(list);
         that.setData({
           searchList: list,
           loadModal: false //搜索结果框
@@ -212,35 +213,65 @@ Page({
   searchSinglePlay: function(event) {
     let data = event.currentTarget.dataset;
     let that = this;
-    wx.request({
-      url: "http://api.zsfmyz.top/music?songmid=" + data.music.songmid + "&guid=126548448",
-      method: 'GET',
-      header: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      success: function (res) {
-        data.music.url = res.data.data.musicUrl
-        singlePlay(that, data);
-      }
-    })
-    // getLrc(that, that.data.songData.lrc);
+    singlePlay(that, data);
+    getLrc(that, that.data.songData.lrc);
   },
   //周董歌曲点播
   jaySinglePlay: function(event) {
     let data = event.currentTarget.dataset;
     let that = this;
-    wx.request({
-      url: "http://api.zsfmyz.top/music?songmid=" + data.music.songmid + "&guid=126548448",
-      method: 'GET',
-      header: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      success: function (res) {
-        data.music.url = res.data.data.musicUrl
-        singlePlay(that, data);
-      }
+    singlePlay(that, data);
+    getLrc(that, that.data.songData.lrc);
+  },
+  // 排行榜歌曲点播 暂时废弃
+  flagMusicPlay: function(event) {
+    let that = this;
+    let musicData = event.currentTarget.dataset.music.data;
+    that.initPlay(musicData)
+  },
+  // 初始化播放 暂时废弃
+  initPlay: function(musicData) {
+    // 通过歌曲信息获取歌曲播放地址和poster地址。
+    // 必要信息：songmid， filename
+    var that = this;
+
+    // 描述 musicData.albumdesc
+    // 名字 musicData.songname
+    // id musicData.albumid
+    var id = musicData.albumid;
+
+    // poster url "http://imgcache.qq.com/music/photo/album_300/" + id%100 + "/300_albumpic_" + id + "_0.jpg"
+    // 封面
+    that.setData({
+      poster: "https://imgcache.qq.com/music/photo/album_300/" + (id % 100) + "/300_albumpic_" + id + "_0.jpg"
     })
-    // getLrc(that, that.data.songData.lrc); //暂不开放
+
+    // songmid musicData.songmid
+    var songmid = musicData.songmid;
+    var filename = 'C400' + songmid + '.m4a'
+    // https://v1.itooi.cn/tencent/url?key=579621905&id=001fXNWa3t8EQQ&br=192
+
+    var songurl = 'https://v1.itooi.cn/tencent/url?key=579621905&id=' + songmid + '&br=192';
+    that.setData({
+      urlList: [songurl],
+      isplay: true,
+      currentTime: 0,
+      currentTimeText: "00:00",
+      songData: {
+        id: songmid,
+        lrc: "https://v1.itooi.cn/tencent/lrc?key=579621905&id=" + songmid,
+        name: musicData.songname,
+        pic: "https://v1.itooi.cn/tencent/pic?key=579621905&id=" + songmid,
+        singer: musicData.singer[0].name,
+        time: musicData.interval,
+        url: songurl
+      },
+    })
+
+    // that.data.backgroundAudioManager.destroy();
+    audioBackInit(that, that.data.songData.url);
+    that.onAudioPlay();
+    getLrc(that, that.data.songData.lrc);
   },
   /**
    * 生命周期函数--监听页面加载
@@ -255,7 +286,7 @@ Page({
     var that = this;
     //初始化播放
     audioBackInit(that, that.data.songData.url);
-    // getLrc(that, that.data.songData.lrc); //获取歌词 暂时不开放歌词
+    getLrc(that, that.data.songData.lrc); //获取歌词
     getQMusic(that); // 获取排行榜
     getQjayChou(that); // 获取周董歌曲列表
   },
@@ -383,8 +414,10 @@ const audioBackInit = (that, url) => {
   // url: "https://v1.itooi.cn/music/tencent/url?id=0039MnYb0qxYhV&key=579621905",
   // index: 0
   that.data.backgroundAudioManager.src = url;
+  that.data.backgroundAudioManager.title = that.data.songData.name;
   that.data.backgroundAudioManager.coverImgUrl = that.data.songData.pic;
   that.data.backgroundAudioManager.singer = that.data.songData.singer;
+  that.data.backgroundAudioManager.title = that.data.songData.name;
   that.data.backgroundAudioManager.title = that.data.songData.name;
   // that.data.backgroundAudioManager.autoplay = false
 
@@ -447,12 +480,12 @@ const audioBackInit = (that, url) => {
 //获取qq音乐top100榜单
 const getQMusic = (that) => {
   wx.request({
-    url: api_music + 'top',
+    url: api_music + 'song/newest?pageSize=100&page=0&format=1',
     header: {
       "Content-Type": "application/json"
     },
     success: function (res) {
-      let list = res.data.data.list;
+      let list = res.data.data;
 
       for (let i = 0; i < list.length; i++) {
         list[i].index = i;
@@ -467,13 +500,12 @@ const getQMusic = (that) => {
 
 const getQjayChou = (that) => {
   wx.request({
-    url: api_music + "list?w='周杰伦'&n=30&p=1",
+    url: api_music + "search?keyword='周杰伦'&type=song&pageSize=100&page=0&format=1",
     header: {
       "Content-Type": "application/x-www-form-urlencoded"
     },
     success: function(res) {
-      let list = res.data.data.list;
-      console.log(list);
+      let list = res.data.data;
       for (let i = 0; i < list.length; i++) {
         list[i].index = i;
         list[i].lrcContext = '';
@@ -489,20 +521,20 @@ const singlePlay = (that, data) => {
   let musicData = data.music;
   that.setData({
     songData: {
-      id: musicData.songmid,
-      // lrc: musicData.lrc,
+      id: musicData.id,
+      lrc: musicData.lrc,
       lrcContext: "",
-      name: musicData.songname,
-      pic: musicData.albumimg,
-      singer: musicData.singer.name,
-      // time: musicData.time,
+      name: musicData.name,
+      pic: musicData.pic,
+      singer: musicData.singer,
+      time: musicData.time,
       url: musicData.url,
       index: musicData.index
     }
   })
   that.setData({
     urlList: [musicData.url],
-    poster: musicData.albumimg,
+    poster: musicData.pic,
     isplay: true,
     currentTime: 0,
     currentTimeText: "00:00"

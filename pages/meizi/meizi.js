@@ -16,6 +16,7 @@ Page({
     // console.log("longtime加载了");
     var that = this;
     myPage++;
+    console.log(myPage);
     findMeiZhi(that, myPage);
   },
 
@@ -88,16 +89,17 @@ Page({
 var myPage = 1;
 
 function findMeiZhi(that, targetPage) {
-    var BASE_URL= "https://gank.io/api/";
+    var BASE_URL= "http://gank.io/api/";
     // var BASE_URL = "https://www.zsfmyz.top:8080/api/";
     var MEIZHI_URL = BASE_URL.concat("data/福利/50/");
   wx.request({
     url: encodeURI(MEIZHI_URL.concat(targetPage)), //手动用encodeURI对url进行转码，小程序不自动转码
     header: {
-      "Content-Type": "application/json"
+      // "Content-Type": "application/json"
     },
     success: function (res) {
       console.log(res)
+
       // var data = JSON.parse(res.data)
       if (res == null ||
         res.data == null ||
@@ -123,7 +125,7 @@ function findMeiZhi(that, targetPage) {
       for (var i = 0; i < res.data.results.length; i++) {
         time = res.data.results[i].publishedAt.split("T")[0];
         src = res.data.results[i].url;
-        //console.log(src);
+        // console.log(src);
         list.push({ src: src, time: time });
       }
 
@@ -131,6 +133,9 @@ function findMeiZhi(that, targetPage) {
         items: list,
         hidden: true
       });
+    },
+    error: function (err) {
+      console.log(err);
     }
   });
 }

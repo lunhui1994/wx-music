@@ -43,11 +43,13 @@ function json2str(json) {
 }
 
 const _Api = {
-  music: 'https://v1.itooi.cn/'
+  music: 'https://v1.itooi.cn/',
+  my_music: 'http://api.zsfmyz.top/'
 }
 
 const _Interface = {
-  tencent: _Api.music + 'tencent/',
+  // tencent: _Api.music + 'tencent/',
+  tencent: _Api.my_music,
   kugou: _Api.music + 'kugou/',
   migu: _Api.music + 'migu/',
   netease: _Api.music + 'netease/',
