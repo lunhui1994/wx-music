@@ -2,13 +2,11 @@
 const uitl = require("../../utils/util.js");
 const api_music = uitl.interface.tencent; // kugou migu netease
 Page({
-
   /**
    * 页面的初始数据
    */
   data: {
-    //nav
-    TabCur: 1,
+    TabCur: 1, //nav
     scrollLeft: 0,
     //当前播放歌曲信息
     songData: {
@@ -16,18 +14,17 @@ Page({
       // lrc: api_music + "lrc?id=0039MnYb0qxYhV&key=579621905",
       // lrcContext: "",
       name: "我是如此相信",
-      pic: "http://imgcache.qq.com/music/photo/album_300/9/300_albumpic_9612009_0.jpg",
+      pic: "http://imgcache.qq.com/music/photo/album_300/a9/300_albumpic_9612009_0.jpg",
       singer: "周杰伦",
       time: 269,
       url: api_music + "url?id=0039MnYb0qxYhV&key=579621905",
       index: 0
     },
     // 加载框
-    loadModal: false,
-
+    loadModal: false, //搜索加载框
     innerAudioContext: null,
     backgroundAudioManager: null,
-    urlList: [api_music + "url?id=0039MnYb0qxYhV&key=579621905"],
+    urlList: [api_music + "url?id=0039MnYb0qxYhV&key=579621905"], //播放列表
     audioPlayT: "播放",
     audioPauseT: "暂停",
     currentTime: 0, //当前播放时间点
@@ -35,10 +32,6 @@ Page({
     duration: 0, //歌曲时长
     isplay: false, //是否在播放
     playType: 'single', //播放模式：single 单曲循环/
-
-    // typePickerName: ['歌名', '专辑', '歌单', 'MV', '用户', '歌词'], // 搜索种类名称
-    // typePicker: ['song', 'album', 'list', 'mv', 'user', 'lrc'], // 搜索种类
-
     multiArray: [
       ['QQ音乐'], //['QQ音乐', '网易云', '酷狗']
       ['歌名'] //['歌名', '专辑', '歌单', 'MV', '用户', '歌词']
@@ -52,7 +45,7 @@ Page({
     songList: [], // 歌曲列表 top100
     searchList: [], //搜索列表 前100
     jayList: [], //jaychou 前60
-    poster: api_music + 'pic?id=0039MnYb0qxYhV&key=579621905' //封面图
+    poster: "http://imgcache.qq.com/music/photo/album_300/9/300_albumpic_9612009_0.jpg" //封面图
   },
   PickerChange(e) {
     let that = this;
@@ -145,29 +138,23 @@ Page({
       })
     }
   },
-  onAudioPlay: function() {
+  onAudioPlay: function() { // 播放
     this.data.backgroundAudioManager.play();
     this.setData({
       isplay: false
     })
   },
-  onAudioPause: function() {
+  onAudioPause: function() { // 暂停
     this.data.backgroundAudioManager.pause();
     this.setData({
       isplay: true
     })
   },
-  changeTime: function(e) {
+  changeTime: function(e) { // seek时间
     this.data.backgroundAudioManager.seek(Math.floor(e.detail.value));
     this.data.backgroundAudioManager.play();
     this.setData({
       isplay: false
-    })
-  },
-  changingT: function(e) {
-    this.data.backgroundAudioManager.pause();
-    this.setData({
-      isplay: true
     })
   },
   searchNameFn: function(event) {
@@ -176,7 +163,7 @@ Page({
       'searchData.musicName': event.detail.value
     })
   },
-  searchMusic: function() {
+  searchMusic: function() { //搜索音乐 fn
     let that = this;
     that.setData({
       loadModal: true
@@ -194,13 +181,11 @@ Page({
         "Content-Type": "application/x-www-form-urlencoded"
       },
       success: function(res) {
-        console.log(res);
         let list = res.data.data.list;
         for (let i = 0; i < list.length; i++) {
           list[i].index = i;
           list[i].lrcContext = '';
         }
-        console.log(list);
         that.setData({
           searchList: list,
           loadModal: false //搜索结果框
@@ -208,29 +193,12 @@ Page({
       }
     })
   },
-  // 搜索出来的歌点播
-  searchSinglePlay: function(event) {
+  //歌曲点播
+  getSinglePlay: function(event) {
     let data = event.currentTarget.dataset;
     let that = this;
     wx.request({
-      url: "http://api.zsfmyz.top/music?songmid=" + data.music.songmid + "&guid=126548448",
-      method: 'GET',
-      header: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      success: function (res) {
-        data.music.url = res.data.data.musicUrl
-        singlePlay(that, data);
-      }
-    })
-    // getLrc(that, that.data.songData.lrc);
-  },
-  //周董歌曲点播
-  jaySinglePlay: function(event) {
-    let data = event.currentTarget.dataset;
-    let that = this;
-    wx.request({
-      url: "http://api.zsfmyz.top/music?songmid=" + data.music.songmid + "&guid=126548448",
+      url: api_music + "song?songmid=" + data.music.songmid + "&guid=126548448",
       method: 'GET',
       header: {
         "Content-Type": "application/x-www-form-urlencoded"
@@ -442,8 +410,6 @@ const audioBackInit = (that, url) => {
   })
 }
 
-
-// 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg?g_tk=5381&uin=0&format=json&inCharset=utf-8&outCharset=utf-8¬ice=0&platform=h5&needNewCode=1&tpl=3&page=detail&type=top&topid=27&_=1519963122923'
 //获取qq音乐top100榜单
 const getQMusic = (that) => {
   wx.request({
@@ -453,7 +419,6 @@ const getQMusic = (that) => {
     },
     success: function (res) {
       let list = res.data.data.list;
-
       for (let i = 0; i < list.length; i++) {
         list[i].index = i;
         list[i].lrcContext = '';
@@ -473,7 +438,6 @@ const getQjayChou = (that) => {
     },
     success: function(res) {
       let list = res.data.data.list;
-      console.log(list);
       for (let i = 0; i < list.length; i++) {
         list[i].index = i;
         list[i].lrcContext = '';

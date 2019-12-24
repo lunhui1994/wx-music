@@ -1,4 +1,6 @@
 // pages/meizi/meizi.js
+const uitl = require("../../utils/util.js");
+const api_welfare = uitl.interface.welfare; // kugou migu netease
 Page({
 
   /** 
@@ -89,18 +91,16 @@ Page({
 var myPage = 1;
 
 function findMeiZhi(that, targetPage) {
-    var BASE_URL= "http://gank.io/api/";
+    // var BASE_URL= "http://gank.io/api/";
     // var BASE_URL = "https://www.zsfmyz.top:8080/api/";
-    var MEIZHI_URL = BASE_URL.concat("data/福利/50/");
+    // var MEIZHI_URL = BASE_URL.concat("data/福利/50/");
   wx.request({
-    url: encodeURI(MEIZHI_URL.concat(targetPage)), //手动用encodeURI对url进行转码，小程序不自动转码
+    url: api_welfare + "list?per_page=30&page=" + targetPage, //手动用encodeURI对url进行转码，小程序不自动转码
     header: {
       // "Content-Type": "application/json"
     },
     success: function (res) {
-      console.log(res)
-
-      // var data = JSON.parse(res.data)
+      res = res.data;
       if (res == null ||
         res.data == null ||
         res.data.results == null ||

@@ -22,7 +22,7 @@
     </view>
     <view class="fl w250">
       <view class="body-view">
-        <slider bindchanging="changingT" bindchange="changeTime" step="1" value='{{currentTime}}' min='0' max='{{duration}}' block-size='16' left-icon="cancel" right-icon="success_no_circle"/>
+        <slider bindchanging="onAudioPause" bindchange="changeTime" step="1" value='{{currentTime}}' min='0' max='{{duration}}' block-size='16' left-icon="cancel" right-icon="success_no_circle"/>
       </view>
     </view>
     <view class='fl fc_f h40 lh40'>
@@ -86,12 +86,12 @@
       <image src="https://image.weilanwl.com/gif/loading-white.gif" mode="aspectFit" class="gif-white response" style="height:240rpx"></image>
     </view>
     <scroll-view hidden="{{loadModal || !searchList.length}}" scroll-y class='bg-yellow padding radius text-center shadow-blur light h300'>
-      <view bindtap='searchSinglePlay' wx:for="{{searchList}}" wx:key="id" data-musicIndex="{{index}}" data-music="{{song}}" wx:for-item="song" class="lh28 db fs_14">{{song.songname}}----{{song.singer.name}}</view>
+      <view bindtap='getSinglePlay' wx:for="{{searchList}}" wx:key="id" data-musicIndex="{{index}}" data-music="{{song}}" wx:for-item="song" class="lh28 db fs_14">{{song.songname}}----{{song.singer.name}}</view>
     </scroll-view>
   </view>
   <!-- songs list -->
   <view class="padding bg-white padB_80" hidden="{{TabCur!=1}}">
-    <view class="padding-xs d_in w100p" wx:key="cur_count" bindtap='jaySinglePlay' data-music="{{item}}" wx:for="{{songList}}">
+    <view class="padding-xs d_in w100p" wx:key="cur_count" bindtap='getSinglePlay' data-music="{{item}}" wx:for="{{songList}}">
       <view class="cu-tag line-green radius w100p h40 lh40 j_l">{{item.songname}}</view>
     </view>
   </view>
@@ -101,7 +101,7 @@
       <view class="title">开启jaychou循环模式</view>
       <switch bindchange='jaySwicth'></switch>
     </view>
-    <view class="padding-xs d_in" wx:key="id" bindtap='jaySinglePlay' data-music="{{jay}}" data-musicIndex="{{index}}" wx:for="{{jayList}}" wx:for-item="jay" wx:key>
+    <view class="padding-xs d_in" wx:key="id" bindtap='getSinglePlay' data-music="{{jay}}" data-musicIndex="{{index}}" wx:for="{{jayList}}" wx:for-item="jay" wx:key>
       <view class="cu-tag line-green radius">{{jay.songname}}</view>
     </view>
   </view>
