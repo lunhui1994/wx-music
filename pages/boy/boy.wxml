@@ -1,4 +1,0 @@
-<!--pages/boy/boy.wxml-->
-<!-- <web-view src="https://github.com/hariprasanths/Bounceview-Android">连接</web-view> -->
-<nav></nav>
-<view style='margin-top:20px;' class='t_a'><navigator url="https://github.com/hariprasanths/Bounceview-Android">待定</navigator></view>

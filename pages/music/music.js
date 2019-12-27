@@ -1,5 +1,6 @@
 // pages/music/music.js
 const uitl = require("../../utils/util.js");
+const Lyric = require('../../miniprogram_npm/lyric-parser/index.js');
 const api_music = uitl.interface.tencent; // kugou migu netease
 Page({
   /**
@@ -12,7 +13,7 @@ Page({
     songData: {
       id: "0039MnYb0qxYhV",
       // lrc: api_music + "lrc?id=0039MnYb0qxYhV&key=579621905",
-      // lrcContext: "",
+      lrcContext: "",
       name: "我是如此相信",
       pic: "http://imgcache.qq.com/music/photo/album_300/a9/300_albumpic_9612009_0.jpg",
       singer: "周杰伦",
@@ -45,7 +46,9 @@ Page({
     songList: [], // 歌曲列表 top100
     searchList: [], //搜索列表 前100
     jayList: [], //jaychou 前60
-    poster: "http://imgcache.qq.com/music/photo/album_300/9/300_albumpic_9612009_0.jpg" //封面图
+    poster: "http://imgcache.qq.com/music/photo/album_300/9/300_albumpic_9612009_0.jpg", //封面图
+    currentLyric: null,
+    currentLineNum: 0
   },
   PickerChange(e) {
     let that = this;
@@ -178,7 +181,7 @@ Page({
       url: url,
       method: 'GET',
       header: {
-        "Content-Type": "application/x-www-form-urlencoded"
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8;"
       },
       success: function(res) {
         let list = res.data.data.list;
@@ -193,22 +196,38 @@ Page({
       }
     })
   },
+
   //歌曲点播
   getSinglePlay: function(event) {
     let data = event.currentTarget.dataset;
     let that = this;
     wx.request({
-      url: api_music + "song?songmid=" + data.music.songmid + "&guid=126548448",
+      url: api_music + "song?songmid=" + data.music.songmid + "&guid=126548448&lyric=1",
       method: 'GET',
       header: {
-        "Content-Type": "application/x-www-form-urlencoded"
+        "Content-Type": "application/json;charset=utf-8;"
       },
       success: function (res) {
-        data.music.url = res.data.data.musicUrl
+        data.music.url = res.data.data.musicUrl;
+        data.music.lrcContext = res.data.data.lyric;
         singlePlay(that, data);
       }
     })
     // getLrc(that, that.data.songData.lrc); //暂不开放
+  },
+  //歌词handler
+  handleLyric: function ({lineNum, txt}) {
+    let that = this;
+    that.setData({
+        currentLineNum: lineNum,
+        playingLyric: txt
+      })
+    // if (lineNum > 5) {
+    //   let lineEl = this.$refs.lyricLine[lineNum - 5]
+    //   this.$refs.lyricList.scrollToElement(lineEl, 1000)// 滚动到元素
+    // } else {
+    //   this.$refs.lyricList.scrollTo(0, 0, 1000)// 滚动到顶部
+    // }
   },
   /**
    * 生命周期函数--监听页面加载
@@ -227,49 +246,6 @@ Page({
     getQMusic(that); // 获取排行榜
     getQjayChou(that); // 获取周董歌曲列表
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function() {
-
-  }
-
 })
 
 
@@ -378,7 +354,7 @@ const audioBackInit = (that, url) => {
     //     duration: Math.floor(that.data.backgroundAudioManager.duration)
     //   })
     // }
-    if ((Math.floor(that.data.backgroundAudioManager.currentTime) - that.data.currentTime) > 0.5 | (Math.floor(that.data.backgroundAudioManager.currentTime) - that.data.currentTime) < 0.5) {
+    if ((Math.floor(that.data.backgroundAudioManager.currentTime) - that.data.currentTime) > 0.5 || (Math.floor(that.data.backgroundAudioManager.currentTime) - that.data.currentTime) < 0.5) {
       that.setData({
         currentTime: that.data.backgroundAudioManager.currentTime,
         currentTimeText: uitl.sTt(that.data.backgroundAudioManager.currentTime)
@@ -415,7 +391,7 @@ const getQMusic = (that) => {
   wx.request({
     url: api_music + 'top',
     header: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json;charset=utf-8;"
     },
     success: function (res) {
       let list = res.data.data.list;
@@ -434,7 +410,7 @@ const getQjayChou = (that) => {
   wx.request({
     url: api_music + "list?w='周杰伦'&n=30&p=1",
     header: {
-      "Content-Type": "application/x-www-form-urlencoded"
+      "Content-Type": "application/x-www-form-urlencoded;charset=utf-8;"
     },
     success: function(res) {
       let list = res.data.data.list;
@@ -450,38 +426,41 @@ const getQjayChou = (that) => {
 }
 // data : music
 const singlePlay = (that, data) => {
-  let musicData = data.music;
   that.setData({
     songData: {
-      id: musicData.songmid,
-      // lrc: musicData.lrc,
-      lrcContext: "",
-      name: musicData.songname,
-      pic: musicData.albumimg,
-      singer: musicData.singer.name,
-      // time: musicData.time,
-      url: musicData.url,
-      index: musicData.index
+      id: data.music.songmid,
+      lrcContext: data.music.lrcContext,
+      name: data.music.songname,
+      pic: data.music.albumimg,
+      singer: data.music.singer.name,
+      // time: data.music.time,
+      url: data.music.url,
+      index: data.music.index
     }
   })
   that.setData({
-    urlList: [musicData.url],
-    poster: musicData.albumimg,
+    urlList: [data.music.url],
+    poster: data.music.albumimg,
     isplay: true,
     currentTime: 0,
     currentTimeText: "00:00"
   })
   // that.data.innerAudioContext.destroy();
   audioBackInit(that, that.data.songData.url);
+  lyricInit(that, that.data);
   that.onAudioPlay();
 }
-
+const lyricInit = (that, data)=>{
+  let lyric = data.songData.lrcContext //歌词数据
+  that.data.currentLyric = new Lyric(lyric, that.handleLyric) //this.handleLyric回调函数
+  that.data.currentLyric.play();
+}
 const getLrc = (that, url) => {
   // 获取歌词接口
   wx.request({
     url: url,
     header: {
-      'Content-Type': 'application/x-www-form-urlencoded'
+      'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
     },
     success: function(res) {
       that.setData({

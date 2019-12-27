@@ -82,8 +82,12 @@ page {
 }
 /* 播放器组件底部显示 */
 .playCtr {
-  position:fixed;
-  bottom:0px;
-  z-index:100;
-  padding: 10px 15px;
+  position: fixed;
+  height: 160rpx;
+  bottom: 0px;
+  z-index: 100;
+  padding: 20rpx 25rpx 0rpx;
+}
+.playCtr slider {
+  margin: 0;
 }

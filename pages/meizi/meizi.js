@@ -91,9 +91,6 @@ Page({
 var myPage = 1;
 
 function findMeiZhi(that, targetPage) {
-    // var BASE_URL= "http://gank.io/api/";
-    // var BASE_URL = "https://www.zsfmyz.top:8080/api/";
-    // var MEIZHI_URL = BASE_URL.concat("data/福利/50/");
   wx.request({
     url: api_welfare + "list?per_page=30&page=" + targetPage, //手动用encodeURI对url进行转码，小程序不自动转码
     header: {
@@ -125,7 +122,6 @@ function findMeiZhi(that, targetPage) {
       for (var i = 0; i < res.data.results.length; i++) {
         time = res.data.results[i].publishedAt.split("T")[0];
         src = res.data.results[i].url;
-        // console.log(src);
         list.push({ src: src, time: time });
       }
 

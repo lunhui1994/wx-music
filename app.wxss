@@ -54,7 +54,15 @@
 .tc{
     text-align: center;
 }
-
+.tr {
+  text-align: right;
+}
+.tl {
+  text-align: left;
+}
+.vm {
+  vertical-align: middle;
+}
 /* input{
     padding: 10px 15px;
     background-color: #fff;
@@ -107,11 +115,54 @@ checkbox, radio{
     padding-left: 0;
     padding-right: 0;
 }
+
+.w40 {
+width: 80rpx;
+}
+.w75 {
+width: 150rpx;
+}
+.w200 {
+width: 400rpx;
+}
+.h30 {
+height: 60rpx;
+}
+.h40 {
+height: 80rpx;
+}
+.h60 {
+height: 120rpx;
+}
+.h80 {
+height: 120rpx;
+}
+.h75 {
+height: 150rpx;
+}
+.h200 {
+height: 400rpx;
+}
+.h300 {
+height: 600rpx;
+}
+.lh40{
+  line-height: 80rpx;
+}
+.lh28 {
+  line-height: 56rpx;
+}
+.lh24 {
+  line-height: 48rpx;
+}
 .w100p {
   width: 100%;
 }
 .w300 {
   width: 600rpx;
+}
+.w150 {
+  width: 300rpx;
 }
 .w250 {
   width: 500rpx;
@@ -125,9 +176,7 @@ checkbox, radio{
 .fr {
   float: right;
 }
-.tr {
-  text-align: right;
-}
+
 .pad0_30 {
   padding: 0 30px;
 }
@@ -155,36 +204,15 @@ checkbox, radio{
 .d_in {
   display: inline-block;
 }
-
+.fs_12 {
+  font-size: 12px;
+}
 .fs_14 {
   font-size: 14px;
 }
-
-.w40 {
-width: 80rpx;
+.br_50 {
+  border-radius: 50%;
 }
-.w75 {
-width: 150rpx;
-}
-.h40 {
-height: 80rpx;
-}
-.h75 {
-height: 150rpx;
-}
-.h200 {
-height: 400rpx;
-}
-.h300 {
-height: 600rpx;
-}
-.lh40{
-  line-height: 80rpx;
-}
-.lh28 {
-  line-height: 56rpx;
-}
-
 /* flex */
 .j_l {
   justify-content: left; 
@@ -196,6 +224,10 @@ height: 600rpx;
 
 .db {
   display: block;
+}
+
+.mar0_a {
+  margin: 0 auto;
 }
 
 .mar0_5 {

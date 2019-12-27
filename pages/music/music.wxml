@@ -7,26 +7,31 @@
       <text class="text-Abc">{{songData.name + ' ------ ' + songData.singer }}</text>
     </view>
     <view class='music_poster mar0_a'>
-      <image class="{{isplay == false ? 'an' : ''}}" id="pic" src='{{poster}}'></image>
+      <image class="{{isplay ? 'an' : ''}}" id="pic" src='{{poster}}'></image>
     </view>
   </view>
   <!-- 播放器 -->
   <view class="timeBox bg-gradual-green section_gap playCtr">
-    <view class='timePlay fl'>
-      <view bindtap='onAudioPlay' wx:if="{{isplay}}">
-        <image class='w40 h40' src='/imgs/icons/play.png'></image>
+    <view class='fl tc w75'>
+      <image class='w40 h40 mar0_a br_50' src='{{poster}}'></image>
+      <view>{{songData.singer}}</view>
+    </view>
+    <view class="fl w200 tc h60">
+      <view class="w200 h40">
+        <text class="fs_12 lh40">{{playingLyric}}</text>
       </view>
-      <view bindtap='onAudioPause' wx:if="{{!isplay}}">
+      <view class="body-view w150 mar0_a">
+        <slider bindchanging="onAudioPause" bindchange="changeTime" step="1" value='{{currentTime}}' min='0' max='{{duration}}' block-size='12' left-icon="cancel" right-icon="success_no_circle"/>
+      </view>
+    </view>
+    <view class='fl tc h60 vm w75'>
+      <view bindtap='onAudioPlay' wx:if="{{isplay}}">
         <image class='w40 h40' src='/imgs/icons/pause.png'></image>
       </view>
-    </view>
-    <view class="fl w250">
-      <view class="body-view">
-        <slider bindchanging="onAudioPause" bindchange="changeTime" step="1" value='{{currentTime}}' min='0' max='{{duration}}' block-size='16' left-icon="cancel" right-icon="success_no_circle"/>
+      <view bindtap='onAudioPause' wx:if="{{!isplay}}">
+        <image class='w40 h40' src='/imgs/icons/play.png'></image>
       </view>
-    </view>
-    <view class='fl fc_f h40 lh40'>
-      {{currentTimeText}}
+       {{currentTimeText}}
     </view>
   </view>
   <!-- 播放器 end -->
