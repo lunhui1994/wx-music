@@ -142,22 +142,25 @@ Page({
     }
   },
   onAudioPlay: function() { // 播放
-    this.data.backgroundAudioManager.play();
-    this.setData({
-      isplay: false
-    })
-  },
-  onAudioPause: function() { // 暂停
-    this.data.backgroundAudioManager.pause();
-    this.setData({
+    let that = this;
+    that.data.backgroundAudioManager.play();
+    that.setData({
       isplay: true
     })
   },
-  changeTime: function(e) { // seek时间
-    this.data.backgroundAudioManager.seek(Math.floor(e.detail.value));
-    this.data.backgroundAudioManager.play();
-    this.setData({
+  onAudioPause: function() { // 暂停
+    let that = this;
+    that.data.backgroundAudioManager.pause();
+    that.setData({
       isplay: false
+    })
+  },
+  changeTime: function(e) { // seek时间
+    let that = this;
+    that.data.backgroundAudioManager.seek(Math.floor(e.detail.value));
+    that.data.backgroundAudioManager.play();
+    that.setData({
+      isplay: true
     })
   },
   searchNameFn: function(event) {
@@ -213,7 +216,6 @@ Page({
         singlePlay(that, data);
       }
     })
-    // getLrc(that, that.data.songData.lrc); //暂不开放
   },
   //歌词handler
   handleLyric: function ({lineNum, txt}) {
@@ -242,77 +244,10 @@ Page({
     var that = this;
     //初始化播放
     audioBackInit(that, that.data.songData.url);
-    // getLrc(that, that.data.songData.lrc); //获取歌词 暂时不开放歌词
     getQMusic(that); // 获取排行榜
     getQjayChou(that); // 获取周董歌曲列表
   },
 })
-
-
-// 初始化音频组件 this ，歌曲地址
-const audioInit = (that, url) => {
-  that.data.innerAudioContext = wx.createInnerAudioContext();
-  that.data.innerAudioContext.src = url;
-  that.data.innerAudioContext.autoplay = false
-
-  that.data.innerAudioContext.onCanplay(() => {
-    that.data.innerAudioContext.duration;
-    setTimeout(() => {
-      that.setData({
-        duration: Math.floor(that.data.innerAudioContext.duration)
-      })
-    }, 300)
-  })
-  that.data.innerAudioContext.onPlay(() => {
-
-  })
-  that.data.innerAudioContext.onStop(() => {
-    console.log('i am onStop')
-    that.data.innerAudioContext.stop()
-    //播放停止，销毁该实例
-    that.data.innerAudioContext.destroy()
-  })
-  that.data.innerAudioContext.onTimeUpdate(() => {
-    // if (!that.data.duration) {
-    //   that.setData({
-    //     duration: Math.floor(that.data.innerAudioContext.duration)
-    //   })
-    // }
-    if ((Math.floor(that.data.innerAudioContext.currentTime) - that.data.currentTime) > 0.5 | (Math.floor(that.data.innerAudioContext.currentTime) - that.data.currentTime) < 0.5) {
-      that.setData({
-        currentTime: that.data.innerAudioContext.currentTime,
-        currentTimeText: uitl.sTt(that.data.innerAudioContext.currentTime)
-      })
-    }
-  })
-  that.data.innerAudioContext.onEnded(() => {
-    console.log('i am onEnded')
-    //播放结束，销毁该实例
-    if (that.data.playType === 'single') {
-      that.data.innerAudioContext.seek(0);
-      that.data.innerAudioContext.play();
-    } else if (that.data.playType === 'jaychou') {
-      let index = that.data.songData.index;
-      that.setData({
-        songData: that.data.jayList[index + 1],
-        urlList: [that.data.songData.url],
-        poster: that.data.songData.pic,
-        isplay: true,
-        currentTime: 0,
-        currentTimeText: "00:00"
-      })
-      that.data.innerAudioContext.destroy();
-      audioInit(that, that.data.songData.url);
-      that.onAudioPlay();
-    } else {
-      that.data.innerAudioContext.destroy();
-    }
-  })
-  that.data.innerAudioContext.onError((res) => {
-    that.data.innerAudioContext.destroy()
-  })
-}
-
 
 // 背景播放 初始化音频组件 this ，歌曲地址
 const audioBackInit = (that, url) => {
@@ -349,24 +284,23 @@ const audioBackInit = (that, url) => {
     //播放停止，销毁该实例
   })
   that.data.backgroundAudioManager.onTimeUpdate(() => {
-    // if (!that.data.duration) {
-    //   that.setData({
-    //     duration: Math.floor(that.data.backgroundAudioManager.duration)
-    //   })
-    // }
     if ((Math.floor(that.data.backgroundAudioManager.currentTime) - that.data.currentTime) > 0.5 || (Math.floor(that.data.backgroundAudioManager.currentTime) - that.data.currentTime) < 0.5) {
       that.setData({
         currentTime: that.data.backgroundAudioManager.currentTime,
         currentTimeText: uitl.sTt(that.data.backgroundAudioManager.currentTime)
       })
+      // 歌词同步
+      that.data.currentLyric.seek(that.data.backgroundAudioManager.currentTime * 1000);
     }
   })
   that.data.backgroundAudioManager.onEnded(() => {
     console.log('i am onEnded')
     //播放结束，销毁该实例
     if (that.data.playType === 'single') {
-      that.data.backgroundAudioManager.seek(0);
-      that.data.backgroundAudioManager.play();
+      // that.data.backgroundAudioManager.seek(0);
+      // that.data.backgroundAudioManager.play();
+      audioBackInit(that, that.data.songData.url);
+      that.onAudioPlay();
     } else if (that.data.playType === 'jaychou') {
       let index = that.data.songData.index;
       that.setData({
@@ -386,7 +320,7 @@ const audioBackInit = (that, url) => {
   })
 }
 
-//获取qq音乐top100榜单
+// 获取qq音乐top100榜单
 const getQMusic = (that) => {
   wx.request({
     url: api_music + 'top',
@@ -405,7 +339,7 @@ const getQMusic = (that) => {
     }
   })
 }
-
+// 获取周杰伦歌曲列表
 const getQjayChou = (that) => {
   wx.request({
     url: api_music + "list?w='周杰伦'&n=30&p=1",
@@ -424,7 +358,7 @@ const getQjayChou = (that) => {
     }
   })
 }
-// data : music
+// 点播
 const singlePlay = (that, data) => {
   that.setData({
     songData: {
@@ -450,22 +384,14 @@ const singlePlay = (that, data) => {
   lyricInit(that, that.data);
   that.onAudioPlay();
 }
+// 歌词初始化
 const lyricInit = (that, data)=>{
+  if (that.data.currentLyric != null) {
+    // 清除字幕定时器
+    // clearTimeout(that.data.currentLyric.timer);
+    // that.data.currentLyric.stop()
+  };
   let lyric = data.songData.lrcContext //歌词数据
   that.data.currentLyric = new Lyric(lyric, that.handleLyric) //this.handleLyric回调函数
-  that.data.currentLyric.play();
-}
-const getLrc = (that, url) => {
-  // 获取歌词接口
-  wx.request({
-    url: url,
-    header: {
-      'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
-    },
-    success: function(res) {
-      that.setData({
-        "songData.lrcContext": res.data.replace(/↵/g, "\n")
-      })
-    }
-  })
+  // that.data.currentLyric.play(); //字幕播放
 }

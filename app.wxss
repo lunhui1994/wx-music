@@ -115,7 +115,11 @@ checkbox, radio{
     padding-left: 0;
     padding-right: 0;
 }
-
+.t_e {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 .w40 {
 width: 80rpx;
 }
@@ -124,6 +128,25 @@ width: 150rpx;
 }
 .w200 {
 width: 400rpx;
+}
+
+.w50p {
+  width: 50%;
+}
+.w100p {
+  width: 100%;
+}
+.w300 {
+  width: 600rpx;
+}
+.w150 {
+  width: 300rpx;
+}
+.w250 {
+  width: 500rpx;
+}
+.w270 {
+  width: 540rpx;
 }
 .h30 {
 height: 60rpx;
@@ -154,21 +177,6 @@ height: 600rpx;
 }
 .lh24 {
   line-height: 48rpx;
-}
-.w100p {
-  width: 100%;
-}
-.w300 {
-  width: 600rpx;
-}
-.w150 {
-  width: 300rpx;
-}
-.w250 {
-  width: 500rpx;
-}
-.w270 {
-  width: 540rpx;
 }
 .fl {
   float: left;
@@ -256,6 +264,12 @@ height: 600rpx;
   border-radius: 10rpx;
 }
 
+.item_odd {
+  background-color: #eee
+}
+.item_even {
+  background-color: #fff
+}
 .btn_flag_sm {
   padding: 10rpx 20rpx;
   line-height: 32rpx;

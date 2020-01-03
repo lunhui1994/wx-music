@@ -1,6 +1,3 @@
-<!--pages/music/music.wxml-->
-<!-- <nav></nav> -->
-<!-- <text>pages/music/music.wxml</text> -->
 <block>
   <view class="padding bg-white bg-gradual-green" hidden="{{TabCur!=3}}">
     <view class="padding text-center text-df">
@@ -14,14 +11,16 @@
   <view class="timeBox bg-gradual-green section_gap playCtr">
     <view class='fl tc w75'>
       <image class='w40 h40 mar0_a br_50' src='{{poster}}'></image>
-      <view>{{songData.singer}}</view>
+      <view>
+        <text class="t_e">{{songData.singer}}</text>
+      </view>
     </view>
     <view class="fl w200 tc h60">
       <view class="w200 h40">
-        <text class="fs_12 lh40">{{playingLyric}}</text>
+        <text class="fs_12">{{playingLyric}}</text>
       </view>
       <view class="body-view w150 mar0_a">
-        <slider bindchanging="onAudioPause" bindchange="changeTime" step="1" value='{{currentTime}}' min='0' max='{{duration}}' block-size='12' left-icon="cancel" right-icon="success_no_circle"/>
+        <slider bindchange="changeTime" step="1" value='{{currentTime}}' min='0' max='{{duration}}' block-size='12' left-icon="cancel" right-icon="success_no_circle" />
       </view>
     </view>
     <view class='fl tc h60 vm w75'>
@@ -31,7 +30,7 @@
       <view bindtap='onAudioPause' wx:if="{{!isplay}}">
         <image class='w40 h40' src='/imgs/icons/play.png'></image>
       </view>
-       {{currentTimeText}}
+      {{currentTimeText}}
     </view>
   </view>
   <!-- 播放器 end -->
@@ -60,7 +59,7 @@
           </view>
         </picker>
       </view>
-      
+
       <!-- <view class="flex solid-bottom padding justify-around">
         <view class="bg-orange padding-sm margin-xs radius">
           <view class="title">类型：</view>
@@ -97,7 +96,9 @@
   <!-- songs list -->
   <view class="padding bg-white padB_80" hidden="{{TabCur!=1}}">
     <view class="padding-xs d_in w100p" wx:key="cur_count" bindtap='getSinglePlay' data-music="{{item}}" wx:for="{{songList}}">
-      <view class="cu-tag line-green radius w100p h40 lh40 j_l">{{item.songname}}</view>
+      <view class="cu-tag line-green radius w100p h40 lh40 j_l {{index % 2 === 0 ? 'item_odd' : 'item_even  '}}">
+        <text class="w50p">{{item.songname}}</text>
+        <text class="w50p">{{item.singer.name}}</text> </view>
     </view>
   </view>
   <!-- jayChou list -->
@@ -106,7 +107,7 @@
       <view class="title">开启jaychou循环模式</view>
       <switch bindchange='jaySwicth'></switch>
     </view>
-    <view class="padding-xs d_in" wx:key="id" bindtap='getSinglePlay' data-music="{{jay}}" data-musicIndex="{{index}}" wx:for="{{jayList}}" wx:for-item="jay" wx:key>
+    <view class="padding-xs d_in" wx:key="id" bindtap='getSinglePlay' data-music="{{jay}}" data-musicIndex="{{index}}" wx:for="{{jayList}}" wx:for-item="jay">
       <view class="cu-tag line-green radius">{{jay.songname}}</view>
     </view>
   </view>
@@ -116,10 +117,4 @@
       {{songData.lrcContext}}
     </text>
   </scroll-view>
-
 </block>
-
-<!-- <view class='cu-load load-modal' wx:if="{{loadModal}}">
-  <view class="cu-avatar round png" mode="aspectFit" style="background-image:url(/imgs/logo.png);"></view>
-  <view class='gray-text'>加载中...</view>
-</view> -->
