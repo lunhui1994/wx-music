@@ -1,0 +1,28 @@
+<!--component/player/player.wxml-->
+<!-- 播放器 bg-gradual-green-->
+  <view class="timeBox playCtr">
+    <view class='fl singer'>
+      <image class='w40 h40 mar0_a br_50' src='{{poster}}'></image>
+      <view>
+        <text class="t_e">{{songData.singer}}</text>
+      </view>
+    </view>
+    <view class="fl w200 tc h60 lyric">
+      <view class="w200 h40">
+        <text class="fs_13">{{playingLyric}}</text>
+      </view>
+      <view class="body-view w150 mar0_a">
+        <slider bindchange="seek" step="1" value='{{currentTime}}' min='0' max='{{duration}}' block-size='12' left-icon="cancel" right-icon="success_no_circle" />
+      </view>
+    </view>
+    <view class='fl tc h60 vm w75'>
+      <view bindtap='pause' wx:if="{{isplay}}">
+        <image class='w40 h40' src='/imgs/icons/pause.png'></image>
+      </view>
+      <view bindtap='play' wx:if="{{!isplay}}">
+        <image class='w40 h40' src='/imgs/icons/play.png'></image>
+      </view>
+      {{currentTimeText}}
+    </view>
+  </view>
+  <!-- 播放器 end -->

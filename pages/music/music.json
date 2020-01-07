@@ -5,7 +5,7 @@
   "navigationBarTextStyle": "white",
   "backgroundColor": "#eeeeee",
   "backgroundTextStyle": "light",
-  "usingComponents": {
-    
-  }
+    "usingComponents": {
+      "my-player": "/component/player/player"
+    }
 } 

@@ -48,7 +48,7 @@ page {
             transition-timing-function: cubic-bezier(.34,0,.84,1);
         } */
 
-.timeBox {
+/* .timeBox {
   display: block;
   width: 750rpx;
   flex-grow: 1;
@@ -56,7 +56,7 @@ page {
 .timePlay {
   width: 80rpx;
   height: 80rpx;
-}
+} */
 
 /* 旋转动画 */
 @-webkit-keyframes rotation{

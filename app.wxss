@@ -215,6 +215,9 @@ height: 600rpx;
 .fs_12 {
   font-size: 12px;
 }
+.fs_13 {
+  font-size: 13px;
+}
 .fs_14 {
   font-size: 14px;
 }

@@ -1,0 +1,53 @@
+/* component/player/player.wxss */
+/* .o_hi {
+  overflow: hidden;
+}
+.t_e {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}
+.fs_13 {
+  font-size: 13px;
+} */
+.timeBox {
+  display: block;
+  position: fixed;
+  width: 750rpx;
+  flex-grow: 1;
+  height: 160rpx;
+  bottom: 0px;
+  z-index: 100;
+  padding: 20rpx 25rpx 0rpx;
+  color: #39b54a;
+}
+.timePlay {
+  width: 80rpx;
+  height: 80rpx;
+}
+/* 播放器组件底部显示 */
+.playCtr slider {
+  margin: 0;
+}
+.singer {
+  width: 150rpx;
+  text-align: center;
+}
+.singer image{
+  width: 80rpx;
+  height: 80rpx;
+  margin: 0 auto;
+  border-radius: 50%;
+}
+
+.lyric {
+  height: 120rpx;
+  width: 400rpx;
+  text-align: center;
+}

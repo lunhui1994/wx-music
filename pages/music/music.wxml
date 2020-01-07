@@ -8,7 +8,7 @@
     </view>
   </view>
   <!-- 播放器 -->
-  <view class="timeBox bg-gradual-green section_gap playCtr">
+  <!-- <view class="timeBox bg-gradual-green section_gap playCtr">
     <view class='fl tc w75'>
       <image class='w40 h40 mar0_a br_50' src='{{poster}}'></image>
       <view>
@@ -32,7 +32,8 @@
       </view>
       {{currentTimeText}}
     </view>
-  </view>
+  </view> -->
+  <my-player id="myplayer"></my-player>
   <!-- 播放器 end -->
   <scroll-view scroll-x class="bg-green nav text-center">
     <view class="cu-item {{0==TabCur?'text-white cur':''}}" bindtap="tabSelect" data-id="0">
@@ -95,7 +96,7 @@
   </view>
   <!-- songs list -->
   <view class="padding bg-white padB_80" hidden="{{TabCur!=1}}">
-    <view class="padding-xs d_in w100p" wx:key="cur_count" bindtap='getSinglePlay' data-music="{{item}}" wx:for="{{songList}}">
+    <view class="padding-xs d_in w100p" wx:key="cur_count" bindtap='getSinglePlay' data-musicIndex="{{index}}" data-music="{{item}}" wx:for="{{songList}}">
       <view class="cu-tag line-green radius w100p h40 lh40 j_l {{index % 2 === 0 ? 'item_odd' : 'item_even  '}}">
         <text class="w50p">{{item.songname}}</text>
         <text class="w50p">{{item.singer.name}}</text> </view>
