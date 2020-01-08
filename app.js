@@ -39,7 +39,8 @@ App({
       songData: {},
       currentLyric: null,
       currentLineNum: 0,
-      playingLyric: ''
+      playingLyric: '',
+      playList: [], //播放列表
     }
   },
   service: {

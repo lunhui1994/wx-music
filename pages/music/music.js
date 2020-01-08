@@ -1,6 +1,7 @@
 // pages/music/music.js
 const uitl = require("../../utils/util.js");
 const api_music = uitl.interface.tencent; // kugou migu netease
+let app = getApp();
 Page({
   /**
    * 页面的初始数据
@@ -185,7 +186,6 @@ Page({
         that.setData({
           songData: songData
         })
-        let app = getApp();
         app.globalData.playerData.songData = songData;
         // 播放器组件 内部api 加载歌曲信息。
         that.player.getSinglePlay(data);
@@ -226,6 +226,7 @@ const getQMusic = (that) => {
       that.setData({
         songList: list,
       })
+      app.globalData.playerData.playList = list;
       that.getSinglePlay(null, {
         music: list[0]
       });

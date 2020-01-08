@@ -2,6 +2,7 @@
 const uitl = require("../../utils/util.js");
 const Lyric = require('../../miniprogram_npm/lyric-parser/index.js');
 const api_music = uitl.interface.tencent; // kugou migu netease
+let app = getApp();
 Component({
   /**
    * 组件的属性列表
@@ -19,7 +20,7 @@ Component({
     that: this,
     backgroundAudioManager: null,
     isplay: true, //是否在播放
-    playType: 'single', //播放模式：single 单曲循环/
+    playType: 'single', //播放模式：single 单曲循环/ loop 列表
     poster: "http://imgcache.qq.com/music/photo/album_300/9/300_albumpic_9612009_0.jpg", //封面图
     currentTime: 0, //当前播放时间点
     currentTimeText: "00:00", //歌曲时长格式
@@ -63,6 +64,10 @@ Component({
       that.setData({
         isplay: true
       })
+    },
+    musicGetSinglePlay: function (data) {
+      let that = this;
+      that.triggerEvent('musicGetSinglePlay', {}, {})
     },
     getSinglePlay: function (data) {
       let that = this;
@@ -113,11 +118,19 @@ Component({
       })
       that.data.backgroundAudioManager.onEnded(() => {
         console.log('i am onEnded')
+        console.log(that.data.songData);
+        console.log(app.globalData.playerData.playList);
         that.data.currentLyric.stop();
         //播放结束，销毁该实例
         if (that.data.playType === 'single') {
           that.audioBackInit(that, that.data.songData.url);
           that.play();
+        } else if (that.data.playType === 'loop') {
+          /** 
+           * todo 触发music界面的播放事件，以获取歌曲信息。
+           * */ 
+            // let index = that.data.songData.index;
+            // that.musicGetSinglePlay(app.globalData.playerData.playList[index + 1])
         } else if (that.data.playType === 'jaychou') {
           let index = that.data.songData.index;
           that.setData({
@@ -149,7 +162,6 @@ Component({
           playingLyric: txt
         })
       }) //handleLyric回调函数
-      let app = getApp();
     app.globalData.playerData.currentLyric = that.data.currentLyric;
   },
   singlePlay: (that, data) => {
