@@ -1,38 +1,5 @@
 <block>
-  <view class="padding bg-white bg-gradual-green" hidden="{{TabCur!=3}}">
-    <view class="padding text-center text-df">
-      <text class="text-Abc">{{songData.name + ' ------ ' + songData.singer }}</text>
-    </view>
-    <view class='music_poster mar0_a'>
-      <image class="{{isplay ? 'an' : ''}}" id="pic" src='{{poster}}'></image>
-    </view>
-  </view>
   <!-- 播放器 -->
-  <!-- <view class="timeBox bg-gradual-green section_gap playCtr">
-    <view class='fl tc w75'>
-      <image class='w40 h40 mar0_a br_50' src='{{poster}}'></image>
-      <view>
-        <text class="t_e">{{songData.singer}}</text>
-      </view>
-    </view>
-    <view class="fl w200 tc h60">
-      <view class="w200 h40">
-        <text class="fs_12">{{playingLyric}}</text>
-      </view>
-      <view class="body-view w150 mar0_a">
-        <slider bindchange="changeTime" step="1" value='{{currentTime}}' min='0' max='{{duration}}' block-size='12' left-icon="cancel" right-icon="success_no_circle" />
-      </view>
-    </view>
-    <view class='fl tc h60 vm w75'>
-      <view bindtap='onAudioPlay' wx:if="{{isplay}}">
-        <image class='w40 h40' src='/imgs/icons/pause.png'></image>
-      </view>
-      <view bindtap='onAudioPause' wx:if="{{!isplay}}">
-        <image class='w40 h40' src='/imgs/icons/play.png'></image>
-      </view>
-      {{currentTimeText}}
-    </view>
-  </view> -->
   <my-player id="myplayer"></my-player>
   <!-- 播放器 end -->
   <scroll-view scroll-x class="bg-green nav text-center">
@@ -44,9 +11,6 @@
     </view>
     <view class="cu-item {{2==TabCur?'text-white cur':''}}" bindtap="tabSelect" data-id="2">
       <text class="icon-upstage"></text> jayChou
-    </view>
-    <view class="cu-item {{3==TabCur?'text-white cur':''}}" bindtap="tabSelect" data-id="3">
-      <text class="icon-clothesfill"></text> 歌词
     </view>
   </scroll-view>
   <!-- search -->
@@ -91,13 +55,13 @@
       <image src="https://image.weilanwl.com/gif/loading-white.gif" mode="aspectFit" class="gif-white response" style="height:240rpx"></image>
     </view>
     <scroll-view hidden="{{loadModal || !searchList.length}}" scroll-y class='bg-yellow padding radius text-center shadow-blur light h300'>
-      <view bindtap='getSinglePlay' wx:for="{{searchList}}" wx:key="id" data-musicIndex="{{index}}" data-music="{{song}}" wx:for-item="song" class="lh28 db fs_14">{{song.songname}}----{{song.singer.name}}</view>
+      <view bindtap='getSinglePlay' wx:for="{{searchList}}" wx:key="id" wx:for-item="song" data-musicIndex="{{index}}" data-music="{{song}}"  class="lh28 db fs_14">{{song.songname}}----{{song.singer.name}}</view>
     </scroll-view>
   </view>
   <!-- songs list -->
   <view class="padding bg-white padB_80" hidden="{{TabCur!=1}}">
-    <view class="padding-xs d_in w100p" wx:key="cur_count" bindtap='getSinglePlay' data-musicIndex="{{index}}" data-music="{{item}}" wx:for="{{songList}}">
-      <view class="cu-tag line-green radius w100p h40 lh40 j_l {{index % 2 === 0 ? 'item_odd' : 'item_even  '}}">
+    <view class="d_if w100p" wx:key="cur_count" bindtap='getSinglePlay' data-musicIndex="{{index}}" data-music="{{item}}" wx:for="{{songList}}">
+      <view class="pad05 d_if line-green radius w100p h40 lh40 j_l {{index % 2 === 0 ? 'item_odd' : 'item_even'}}">
         <text class="w50p">{{item.songname}}</text>
         <text class="w50p">{{item.singer.name}}</text> </view>
     </view>
@@ -108,14 +72,10 @@
       <view class="title">开启jaychou循环模式</view>
       <switch bindchange='jaySwicth'></switch>
     </view>
-    <view class="padding-xs d_in" wx:key="id" bindtap='getSinglePlay' data-music="{{jay}}" data-musicIndex="{{index}}" wx:for="{{jayList}}" wx:for-item="jay">
-      <view class="cu-tag line-green radius">{{jay.songname}}</view>
+    <view class="padding-xs d_in w100p" wx:key="cur_count" bindtap='getSinglePlay' data-musicIndex="{{index}}" data-music="{{item}}" wx:for="{{jayList}}">
+      <view class="cu-tag line-green radius w100p h40 lh40 j_l {{index % 2 === 0 ? 'item_odd' : 'item_even'}}">
+        <text class="w50p">{{item.songname}}</text>
+        <text class="w50p">{{item.singer.name}}</text> </view>
     </view>
   </view>
-  <!-- song detail -->
-  <scroll-view scroll-y class="padB_80 bg-green padding radius shadow-blur light h300" hidden="{{TabCur!=3}}">
-    <text class='w100p lh40'>
-      {{songData.lrcContext}}
-    </text>
-  </scroll-view>
 </block>

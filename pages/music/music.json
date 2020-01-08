@@ -1,6 +1,6 @@
 {
   "navigationBarTitleText": "音乐",
-  "enablePullDownRefresh": true,
+  "enablePullDownRefresh": false,
   "navigationBarBackgroundColor": "#39b54a",
   "navigationBarTextStyle": "white",
   "backgroundColor": "#eeeeee",

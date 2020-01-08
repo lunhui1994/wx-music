@@ -129,6 +129,9 @@ width: 150rpx;
 .w200 {
 width: 400rpx;
 }
+.w225 {
+width: 450rpx;
+}
 
 .w50p {
   width: 50%;
@@ -158,7 +161,7 @@ height: 80rpx;
 height: 120rpx;
 }
 .h80 {
-height: 120rpx;
+height: 160rpx;
 }
 .h75 {
 height: 150rpx;
@@ -212,6 +215,9 @@ height: 600rpx;
 .d_in {
   display: inline-block;
 }
+.d_if {
+  display: inline-flex;
+}
 .fs_12 {
   font-size: 12px;
 }
@@ -223,6 +229,9 @@ height: 600rpx;
 }
 .br_50 {
   border-radius: 50%;
+}
+.br_n {
+  border: none
 }
 /* flex */
 .j_l {

@@ -8,7 +8,8 @@
     "pages/about/test/list",
     "pages/about/test/filter",
     "pages/about/home/home",
-    "pages/meizi/meizi"
+    "pages/meizi/meizi",
+    "pages/lyric/lyric"
   ],
   "window": {
     "backgroundTextStyle": "light",

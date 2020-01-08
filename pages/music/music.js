@@ -156,8 +156,13 @@ Page({
     })
   },
   //歌曲点播
-  getSinglePlay: function(event) {
-    let data = event.currentTarget.dataset;
+  getSinglePlay: function(event, musicData) {
+    let data = null;
+    if (event != null) {
+      data = event.currentTarget.dataset;
+    } else {
+      data = musicData;
+    }
     let that = this;
     wx.request({
       url: api_music + "song?songmid=" + data.music.songmid + "&guid=126548448&lyric=1",
@@ -169,6 +174,19 @@ Page({
         data.music.url = res.data.data.musicUrl;
         data.music.vkey = res.data.data.vkey;
         data.music.lrcContext = res.data.data.lyric;
+        let songData = {
+          id: data.music.songmid,
+          lrcContext: data.music.lrcContext,
+          name: data.music.songname,
+          pic: data.music.albumimg,
+          singer: data.music.singer.name,
+          index: data.music.index
+        };
+        that.setData({
+          songData: songData
+        })
+        let app = getApp();
+        app.globalData.playerData.songData = songData;
         // 播放器组件 内部api 加载歌曲信息。
         that.player.getSinglePlay(data);
       }
@@ -206,8 +224,11 @@ const getQMusic = (that) => {
         list[i].lrcContext = '';
       }
       that.setData({
-        songList: list
+        songList: list,
       })
+      that.getSinglePlay(null, {
+        music: list[0]
+      });
     }
   })
 }

@@ -2,16 +2,18 @@
 <!-- 播放器 bg-gradual-green-->
   <view class="timeBox playCtr">
     <view class='fl singer'>
-      <image class='w40 h40 mar0_a br_50' src='{{poster}}'></image>
-      <view>
-        <text class="t_e">{{songData.singer}}</text>
-      </view>
+      <navigator url="/pages/lyric/lyric">
+        <image class="w40 h40 mar0_a br_50 {{isplay ? 'an' : ''}}" src='{{poster}}'></image>
+        <view>
+          <text class="t_e">{{songData.singer}}</text>
+        </view>
+      </navigator>
     </view>
-    <view class="fl w200 tc h60 lyric">
-      <view class="w200 h40">
+    <view class="fl w225 tc h60 lyric">
+      <view class="w225 h40">
         <text class="fs_13">{{playingLyric}}</text>
       </view>
-      <view class="body-view w150 mar0_a">
+      <view class="body-view w150 mar0_a h20">
         <slider bindchange="seek" step="1" value='{{currentTime}}' min='0' max='{{duration}}' block-size='12' left-icon="cancel" right-icon="success_no_circle" />
       </view>
     </view>

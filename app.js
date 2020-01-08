@@ -34,7 +34,13 @@ App({
     })
   },
   globalData: {
-    userInfo: null
+    userInfo: null,
+    playerData: {
+      songData: {},
+      currentLyric: null,
+      currentLineNum: 0,
+      playingLyric: ''
+    }
   },
   service: {
     rq : function (queryStr, data, callback) {

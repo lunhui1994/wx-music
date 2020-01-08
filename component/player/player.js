@@ -19,9 +19,16 @@ Component({
     that: this,
     backgroundAudioManager: null,
     isplay: true, //是否在播放
+    playType: 'single', //播放模式：single 单曲循环/
+    poster: "http://imgcache.qq.com/music/photo/album_300/9/300_albumpic_9612009_0.jpg", //封面图
+    currentTime: 0, //当前播放时间点
+    currentTimeText: "00:00", //歌曲时长格式
+    duration: 0, //歌曲时长
+    currentLyric: null, // 歌词对象
+    currentLineNum: 0, // 歌词行
+    playingLyric: '', // 歌词行内容
     songData: {
       id: "0039MnYb0qxYhV",
-      // lrc: api_music + "lrc?id=0039MnYb0qxYhV&key=579621905",
       lrcContext: "",
       name: "我是如此相信",
       pic: "http://imgcache.qq.com/music/photo/album_300/a9/300_albumpic_9612009_0.jpg",
@@ -30,14 +37,6 @@ Component({
       index: 0,
       vkey: "29F971703CF4D78BFEE26925734ED65DD0DBEFD557E83BD837899912003ABAC59B2DC0E73CF81AEBF0F82122B82B302075F7878D0758F696"
     },
-    playType: 'single', //播放模式：single 单曲循环/
-    poster: "http://imgcache.qq.com/music/photo/album_300/9/300_albumpic_9612009_0.jpg", //封面图
-    currentTime: 0, //当前播放时间点
-    currentTimeText: "00:00", //歌曲时长格式
-    duration: 0, //歌曲时长
-    currentLyric: null, // 歌词对象
-    currentLineNum: 0, // 歌词行
-    playingLyric: '' // 歌词行内容
   },
   /**
    * 组件的方法列表
@@ -81,11 +80,18 @@ Component({
       })
       that.data.backgroundAudioManager.onPlay(() => {
         console.info('播放');
+        that.setData({
+          isplay: true
+        })
       })
-      that.data.backgroundAudioManager.onStop(() => {
-        console.log('i am onStop')
-        that.data.backgroundAudioManager.stop()
+      that.data.backgroundAudioManager.onPause(() => {
+        console.log('i am onPause')
+        that.data.backgroundAudioManager.pause()
+        that.data.currentLyric.stop()
         //播放停止，销毁该实例
+        that.setData({
+          isplay: false
+        })
       })
       that.data.backgroundAudioManager.onTimeUpdate(() => {
         //同步播放时间
@@ -99,15 +105,19 @@ Component({
             currentTimeText: uitl.sTt(that.data.backgroundAudioManager.currentTime)
           })
           // 歌词同步
-          that.data.currentLyric.seek(that.data.backgroundAudioManager.currentTime * 1000);
+          /** 
+           * miniprogram_npm/lyric-parser 579: seek 函数 增加isStop 判断seek是否自动播放
+           * */ 
+          that.data.currentLyric.seek(that.data.backgroundAudioManager.currentTime * 1000, true); 
         }
       })
       that.data.backgroundAudioManager.onEnded(() => {
         console.log('i am onEnded')
+        that.data.currentLyric.stop();
         //播放结束，销毁该实例
         if (that.data.playType === 'single') {
           that.audioBackInit(that, that.data.songData.url);
-          that.onAudioPlay();
+          that.play();
         } else if (that.data.playType === 'jaychou') {
           let index = that.data.songData.index;
           that.setData({
@@ -119,7 +129,7 @@ Component({
             currentTimeText: "00:00"
           })
           that.audioBackInit(that, that.data.songData.url);
-          that.onAudioPlay();
+          that.play();
         }
       })
       that.data.backgroundAudioManager.onError((res) => {
@@ -139,6 +149,8 @@ Component({
           playingLyric: txt
         })
       }) //handleLyric回调函数
+      let app = getApp();
+    app.globalData.playerData.currentLyric = that.data.currentLyric;
   },
   singlePlay: (that, data) => {
       if (data.music.vkey === '') {
@@ -151,7 +163,6 @@ Component({
           name: data.music.songname,
           pic: data.music.albumimg,
           singer: data.music.singer.name,
-          // time: data.time,
           url: data.music.url,
           index: data.music.index
         }
@@ -165,7 +176,7 @@ Component({
       })
       that.audioBackInit(that, that.data.songData.url);
       that.lyricInit(that, that.data);
-      that.onAudioPlay();
+      that.play();
     }
   },
   ready: function() {

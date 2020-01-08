@@ -576,9 +576,16 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
         clearTimeout(this.timer);
       }
     }, {
+      /**
+       * ZSF
+       * isStop判断跳转之后是否播放。
+       */
       key: 'seek',
-      value: function seek(offset) {
+      value: function seek(offset, isStop) {
         this.play(offset);
+        if (isStop) {
+          this.stop();
+        }
       }
     }]);
     return Lyric;
