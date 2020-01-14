@@ -8,7 +8,7 @@
     "pages/about/test/list",
     "pages/about/test/filter",
     "pages/about/home/home",
-    "pages/meizi/meizi",
+    "pages/girls/girls",
     "pages/lyric/lyric"
   ],
   "window": {
@@ -23,7 +23,7 @@
     "backgroundColor": "#fff",
     "list": [
       {
-        "pagePath": "pages/meizi/meizi",
+        "pagePath": "pages/girls/girls",
         "text": "福利",
         "iconPath": "imgs/icons/star.png",
         "selectedIconPath": "imgs/icons/star-selected.png"

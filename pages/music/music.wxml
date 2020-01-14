@@ -1,6 +1,6 @@
 <block>
   <!-- 播放器 -->
-  <my-player id="myplayer" bind:musicGetSinglePlay='getSinglePlay'></my-player>
+  <my-player id="myplayer" bind:musicGetSinglePlay='toPlayerSinglePlay'></my-player>
   <!-- 播放器 end -->
   <scroll-view scroll-x class="bg-green nav text-center">
     <view class="cu-item {{0==TabCur?'text-white cur':''}}" bindtap="tabSelect" data-id="0">
@@ -10,7 +10,7 @@
       <text class="icon-upstagefill"></text> 排行榜
     </view>
     <view class="cu-item {{2==TabCur?'text-white cur':''}}" bindtap="tabSelect" data-id="2">
-      <text class="icon-upstage"></text> jayChou
+      <text class="icon-upstage"></text> Jay
     </view>
   </scroll-view>
   <!-- search -->
@@ -47,20 +47,22 @@
       <view class="cu-form-group">
         <view class="title">歌曲搜索：</view>
         <input placeholder='名称' bindinput='searchNameFn'></input>
-        <button bindtap='searchMusic' class=" cu-btn bg-green shadow">搜索</button>
+        <button bindtap='searchMusic' class="cu-btn bg-green shadow">搜索</button>
       </view>
     </form>
     <!-- searchlist -->
     <view hidden="{{!loadModal}}" class="bg-white flex-sub radius shadow-lg">
       <image src="https://image.weilanwl.com/gif/loading-white.gif" mode="aspectFit" class="gif-white response" style="height:240rpx"></image>
     </view>
-    <scroll-view hidden="{{loadModal || !searchList.length}}" scroll-y class='bg-yellow padding radius text-center shadow-blur light h300'>
-      <view bindtap='getSinglePlay' wx:for="{{searchList}}" wx:key="id" wx:for-item="song" data-musicIndex="{{index}}" data-music="{{song}}"  class="lh28 db fs_14">{{song.songname}}----{{song.singer.name}}</view>
-    </scroll-view>
+    <view class="d_if w100p pad0_15" wx:key="cur_count" bindtap='tapSinglePlay' data-musicIndex="{{index}}" data-music="{{item}}" wx:for="{{searchList}}">
+      <view class="pad05 d_if line-green radius w100p h40 lh40 j_l">
+        <text class="w50p">{{item.songname}}</text>
+        <text class="w50p">{{item.singer.name}}</text> </view>
+    </view>
   </view>
   <!-- songs list -->
   <view class="padding bg-white padB_80" hidden="{{TabCur!=1}}">
-    <view class="d_if w100p" wx:key="cur_count" bindtap='getSinglePlay' data-musicIndex="{{index}}" data-music="{{item}}" wx:for="{{songList}}">
+    <view class="d_if w100p" wx:key="cur_count" bindtap='tapSinglePlay' data-musicIndex="{{index}}" data-music="{{item}}" wx:for="{{songList}}">
       <view class="pad05 d_if line-green radius w100p h40 lh40 j_l {{index % 2 === 0 ? 'item_odd' : 'item_even'}}">
         <text class="w50p">{{item.songname}}</text>
         <text class="w50p">{{item.singer.name}}</text> </view>
@@ -68,12 +70,12 @@
   </view>
   <!-- jayChou list -->
   <view class="padB_80 padding bg-white" hidden="{{TabCur!=2}}">
-    <view class="cu-form-group margin-top">
+    <!-- <view class="cu-form-group margin-top">
       <view class="title">开启jaychou循环模式</view>
       <switch bindchange='jaySwicth'></switch>
-    </view>
-    <view class="padding-xs d_in w100p" wx:key="cur_count" bindtap='getSinglePlay' data-musicIndex="{{index}}" data-music="{{item}}" wx:for="{{jayList}}">
-      <view class="cu-tag line-green radius w100p h40 lh40 j_l {{index % 2 === 0 ? 'item_odd' : 'item_even'}}">
+    </view> -->
+    <view class="d_if w100p" wx:key="cur_count" bindtap='tapSinglePlay' data-musicIndex="{{index}}" data-music="{{item}}" wx:for="{{jayList}}">
+      <view class="pad05 d_if line-green radius w100p h40 lh40 j_l {{index % 2 === 0 ? 'item_odd' : 'item_even'}}">
         <text class="w50p">{{item.songname}}</text>
         <text class="w50p">{{item.singer.name}}</text> </view>
     </view>

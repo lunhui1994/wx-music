@@ -120,11 +120,20 @@ checkbox, radio{
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+.t_s1{
+  text-shadow: rpx rpx 2rpx #fff;
+}
 .w40 {
 width: 80rpx;
 }
+.w60 {
+width: 120rpx;
+}
 .w75 {
 width: 150rpx;
+}
+.w90 {
+width: 180rpx;
 }
 .w200 {
 width: 400rpx;
@@ -172,6 +181,9 @@ height: 400rpx;
 .h300 {
 height: 600rpx;
 }
+.h400 {
+height: 800rpx;
+}
 .lh40{
   line-height: 80rpx;
 }
@@ -189,10 +201,10 @@ height: 600rpx;
 }
 
 .pad0_30 {
-  padding: 0 30px;
+  padding: 0 60rpx;
 }
 .pad0_15 {
-  padding: 0 15px;
+  padding: 0 30rpx;
 }
 .fc_e {
   color: #eee;

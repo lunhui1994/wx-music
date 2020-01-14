@@ -33,7 +33,7 @@ App({
       }
     })
   },
-  globalData: {
+  globalData: { // 播放音乐全局变量
     userInfo: null,
     playerData: {
       songData: {},

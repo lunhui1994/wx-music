@@ -1,15 +1,17 @@
 /* component/player/player.wxss */
 .timeBox {
   display: block;
+  box-sizing: border-box;
   position: fixed;
   width: 750rpx;
   flex-grow: 1;
-  height: 140rpx;
+  height: 160rpx;
   bottom: 0px;
   z-index: 100;
-  /* padding: 20rpx 25rpx 0rpx; */
-  color: #39b54a;
-  background-color: rgba(39, b5, 4a, 0.3)
+  padding-top: 20rpx;
+  color: #fff;
+  text-shadow: 0rpx 0rpx 2rpx #fff;
+  /* background-color: rgba(57, 181, 74, 0.5) */
 }
 .timePlay {
   width: 80rpx;

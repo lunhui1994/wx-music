@@ -6,7 +6,7 @@
       <view wx:for="{{items}}" >
         <view class='card' style='position:relative'>
           <image class='image b_r_5' mode='aspectFill' src="{{item.src}}"></image>
-          <text class='' style='position:absolute;bottom:10px;display:block;height:34rpx;line-height:34rpx;width:100%;color:#ccc;'>{{item.time}}</text>
+          <text style='position:absolute;bottom:10px;display:block;height:34rpx;line-height:34rpx;width:100%;color:#ccc;'>{{item.time}}</text>
         </view>
       </view>
     </scroll-view>

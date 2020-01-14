@@ -1,5 +1,6 @@
 // pages/music/music.js
 const uitl = require("../../utils/util.js");
+const service = require("../../module/service.js");
 const api_music = uitl.interface.tencent; // kugou migu netease
 let app = getApp();
 Page({
@@ -12,7 +13,6 @@ Page({
     // 加载框
     loadModal: false, //搜索加载框
     innerAudioContext: null,
-    urlList: [api_music + "url?id=0039MnYb0qxYhV&key=579621905"], //播放列表
     multiArray: [
       ['QQ音乐'], //['QQ音乐', '网易云', '酷狗']
       ['歌名'] //['歌名', '专辑', '歌单', 'MV', '用户', '歌词']
@@ -84,7 +84,7 @@ Page({
             type = "user";
             break;
           case 5:
-              type = "lrc";
+            type = "lrc";
             break;
         }
         break;
@@ -108,25 +108,20 @@ Page({
         playType: 'jaychou'
       })
       let data = that.data.jayList[0];
-      that.setData({
-        songData: data
-      })
-      singlePlay(that, {
-        music: data
-      });
+      tapsinglePlay(data);
     } else {
       that.setData({
         playType: 'single'
       })
     }
   },
-  searchNameFn: function(event) {
+  searchNameFn: function (event) {
     let that = this;
     that.setData({
       'searchData.musicName': event.detail.value
     })
   },
-  searchMusic: function() { //搜索音乐 fn
+  searchMusic: function () { //搜索音乐 fn
     let that = this;
     that.setData({
       loadModal: true
@@ -136,88 +131,48 @@ Page({
       p: 1,
       w: that.data.searchData.musicName
     }
-    let url = api_music +"list" + uitl.json2str(param);
-    wx.request({
-      url: url,
-      method: 'GET',
-      header: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8;"
-      },
-      success: function(res) {
-        let list = res.data.data.list;
-        for (let i = 0; i < list.length; i++) {
-          list[i].index = i;
-          list[i].lrcContext = '';
-        }
-        that.setData({
-          searchList: list,
-          loadModal: false //搜索结果框
-        })
-      }
-    })
-  },
-  //歌曲点播
-  getSinglePlay: function(event, musicData) {
-    let data = null;
-    if (event != null) {
-      data = event.currentTarget.dataset;
-    } else {
-      data = musicData;
-    }
-    let that = this;
-    wx.request({
-      url: api_music + "song?songmid=" + data.music.songmid + "&guid=126548448&lyric=1",
-      method: 'GET',
-      header: {
-        "Content-Type": "application/json;charset=utf-8;"
-      },
-      success: function (res) {
-        data.music.url = res.data.data.musicUrl;
-        data.music.vkey = res.data.data.vkey;
-        data.music.lrcContext = res.data.data.lyric;
-        let songData = {
-          id: data.music.songmid,
-          lrcContext: data.music.lrcContext,
-          name: data.music.songname,
-          pic: data.music.albumimg,
-          singer: data.music.singer.name,
-          index: data.music.index
-        };
-        that.setData({
-          songData: songData
-        })
-        app.globalData.playerData.songData = songData;
-        // 播放器组件 内部api 加载歌曲信息。
-        that.player.getSinglePlay(data);
-      }
-    })
-  },
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function(options) {
-    let that = this;
-  },
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function() {
-    var that = this;
-    that.player = that.selectComponent('#myplayer'); // 播放器组件实例
-    //初始化播放
-    getQMusic(that); // 获取排行榜
-    getQjayChou(that); // 获取周董歌曲列表
-  },
-})
+    let url = api_music + "list" + uitl.json2str(param);
+    service.getSearchMusic({url: url}, function (res) {
+      let list = res.data.data.list;
+      for (let i = 0; i < list.length; i++) {
+        list[i].index = i;
+        list[i].lrcContext = '';
 
-// 获取qq音乐top100榜单
-const getQMusic = (that) => {
-  wx.request({
-    url: api_music + 'top',
-    header: {
-      "Content-Type": "application/json;charset=utf-8;"
-    },
-    success: function (res) {
+      }
+      that.setData({
+        searchList: list,
+        loadModal: false //搜索结果框
+      })
+    })
+  },
+  getSinglePlay: function (data) {
+    let that = this;
+    service.getSongurl({ songmid: data.songmid }, function (res) {
+      data.url = res.data.data.musicUrl;
+      data.vkey = res.data.data.vkey;
+      data.lrcContext = res.data.data.lyric;
+      if (data.vkey === '') {
+        return that.getSinglePlay(app.globalData.playerData.playList[data.index + 1])
+      }
+      // 播放器组件 内部api 加载歌曲信息。
+      that.player.getSinglePlay(data);
+    })
+  },
+  //歌曲点播 
+  tapSinglePlay: function (event) {
+    let that = this;
+    let data = event.currentTarget.dataset.music;
+    that.getSinglePlay(data);
+  },
+  // 子组件调用music getSinglePlay点播
+  toPlayerSinglePlay: function (e) {
+    let that = this;
+    let data = app.globalData.playerData.playList[e.detail.index];
+    that.getSinglePlay(data)
+  },
+  getQMusic: function () {
+    let that = this;
+    service.getQMusic(function (res) {
       let list = res.data.data.list;
       for (let i = 0; i < list.length; i++) {
         list[i].index = i;
@@ -227,20 +182,12 @@ const getQMusic = (that) => {
         songList: list,
       })
       app.globalData.playerData.playList = list;
-      that.getSinglePlay(null, {
-        music: list[0]
-      });
-    }
-  })
-}
-// 获取周杰伦歌曲列表
-const getQjayChou = (that) => {
-  wx.request({
-    url: api_music + "list?w='周杰伦'&n=30&p=1",
-    header: {
-      "Content-Type": "application/x-www-form-urlencoded;charset=utf-8;"
-    },
-    success: function(res) {
+      that.getSinglePlay(list[0]);
+    })
+  },
+  getQjayChou: function () {
+    let that = this;
+    service.getQjayChou(function (res) {
       let list = res.data.data.list;
       for (let i = 0; i < list.length; i++) {
         list[i].index = i;
@@ -249,6 +196,22 @@ const getQjayChou = (that) => {
       that.setData({
         jayList: list
       })
-    }
-  })
-}
+    })
+  },
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function (options) {
+    let that = this;
+  },
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function () {
+    var that = this;
+    that.player = that.selectComponent('#myplayer'); // 播放器组件实例
+    //初始化播放
+    that.getQMusic(); // 获取排行榜
+    that.getQjayChou(); // 获取周董歌曲列表
+  },
+})

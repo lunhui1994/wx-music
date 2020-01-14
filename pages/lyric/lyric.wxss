@@ -1,4 +1,11 @@
 /* pages/lyric/lyric.wxss */
+page {
+  height: 100%;
+  font-family: 'Microsoft Yahei';
+}
+.lyric-box {
+  height: 100%;
+}
 .music_poster{
   width: 300rpx;
   height: 300rpx;
@@ -9,4 +16,14 @@
 .music_poster image{
   width: 100%;
   height: 100%;
+}
+.cur_line {
+  text-shadow: 0rpx 0rpx 2rpx #fff;
+  font-size: 36rpx;
+  vertical-align: middle;
+}
+.other_line {
+  color: #eee;
+  opacity: 0.7;
+  vertical-align: middle;
 }

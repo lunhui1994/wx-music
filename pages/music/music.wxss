@@ -12,9 +12,6 @@ page {
 .w750r {
   width: 750rpx;
 }
-.mar0_a {
-  margin: 0 auto;
-}
 .h100p{
   height: 100%;
 }

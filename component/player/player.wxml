@@ -1,30 +1,34 @@
 <!--component/player/player.wxml-->
 <!-- 播放器 bg-gradual-green-->
-  <view class="timeBox playCtr">
-    <view class='fl singer'>
-      <navigator url="/pages/lyric/lyric">
-        <image class="w40 h40 mar0_a br_50 {{isplay ? 'an' : ''}}" src='{{poster}}'></image>
-        <view>
-          <text class="t_e">{{songData.singer}}</text>
-        </view>
-      </navigator>
-    </view>
-    <view class="fl w225 tc h60 lyric">
-      <view class="w225 h40">
-        <text class="fs_13">{{playingLyric}}</text>
-      </view>
-      <view class="body-view w150 mar0_a h20">
-        <slider bindchange="seek" step="1" value='{{currentTime}}' min='0' max='{{duration}}' block-size='12' left-icon="cancel" right-icon="success_no_circle" />
-      </view>
-    </view>
-    <view class='fl tc h60 vm w75'>
+  <view class="timeBox playCtr bg-gradual-green">
+  
+    <!-- 播放 -->
+    <view class='fl tc h60 vm w60'>
       <view bindtap='pause' wx:if="{{isplay}}">
         <image class='w40 h40' src='/imgs/icons/pause.png'></image>
       </view>
       <view bindtap='play' wx:if="{{!isplay}}">
         <image class='w40 h40' src='/imgs/icons/play.png'></image>
       </view>
-      {{currentTimeText}}
+      {{songData.currentTimeText}}
     </view>
+    <!-- 播放end -->
+    <!-- 歌词 进度条 -->
+    <view class="fl w225 tc h60 lyric">
+      <view class="w225 h40 fs_13">{{songData.playingLyric}}</view>
+      <view class="body-view w150 mar0_a h20">
+        <slider bindchange="seek" step="1" value='{{songData.currentTime}}' min='0' max='{{songData.duration}}' block-size='12' left-icon="cancel" right-icon="success_no_circle" />
+      </view>
+    </view>
+    <!-- 歌词 进度条 end-->
+
+    <!-- 歌手 -->
+    <view class='fl singer w90'>
+      <navigator url="/pages/lyric/lyric">
+        <image class="w40 h40 mar0_a br_50 {{isplay ? 'an' : ''}}" src='{{songData.pic}}'></image>
+        <view class="w70 mar0_a text-cut">{{songData.singer.name}}</view>
+      </navigator>
+    </view>
+    <!-- 歌手 end-->
   </view>
   <!-- 播放器 end -->

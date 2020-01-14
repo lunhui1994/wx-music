@@ -1,20 +1,20 @@
-<!--pages/lyric/lyric.wxml-->
-<block>
-<view class="bg-gradual-green">
-  <view class="padding">
-    <view class="padding text-center text-df">
-      <text class="text-Abc">{{songData.name + ' ------ ' + songData.singer }}</text>
-      <!-- <text class="text-Abc">歌曲信息</text> -->
+<!-- pages/lyric/lyric.wxml -->
+<page>
+  <view class="bg-gradual-green lyric-box">
+    <view class="padding">
+      <view class="padding text-center text-df">
+        <text class="text-Abc">{{songData.name + ' ------ ' + songData.singer.name }}</text>
+        <!-- <text class="text-Abc">歌曲信息</text> -->
+      </view>
+      <view class='music_poster mar0_a'>
+        <image class="{{isplay ? 'an' : ''}}" id="pic" src='{{songData.pic}}'></image>
+      </view>
     </view>
-    <view class='music_poster mar0_a'>
-      <image class="{{isplay ? 'an' : ''}}" id="pic" src='{{songData.pic}}'></image>
-    </view>
-  </view>
     <!-- song detail -->
-  <scroll-view scroll-y class="padB_80 padding radius shadow-blur light h300 tc">
-    <text wx:for="{{currentLyric.lines}}" wx:key="time" wx:for-item="line">
-      {{line.txt}}
-    </text>
-  </scroll-view>
-</view>
-</block>
+    <scroll-view scroll-y scroll-into-view="{{'line_' + (currentLineNum > 3 ? (currentLineNum - 3) : currentLineNum)}}" scroll-with-animation='true' class="pad0_30 padding radius shadow-blur light h300 tc">
+      <text id="{{'line_' + index}}" wx:for="{{songData.currentLyric.lines}}" wx:key="time" wx:for-item="line" class="{{currentLineNum === index ? 'cur_line' : 'other_line'}}">
+        {{line.txt}}
+      </text>
+    </scroll-view>
+  </view>
+</page>
