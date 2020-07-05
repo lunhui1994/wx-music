@@ -62,7 +62,7 @@
   </view>
   <!-- songs list -->
   <view class="padding bg-white padB_80" hidden="{{TabCur!=1}}">
-    <view class="d_if w100p" wx:key="cur_count" bindtap='tapSinglePlay' data-musicIndex="{{index}}" data-music="{{item}}" wx:for="{{songList}}">
+    <view class="d_if w100p" wx:key="cur_count" bindtap='tapSinglePlay' data-musicIndex="{{index}}" data-music="{{item}}" wx:for="{{topList}}">
       <view class="pad05 d_if line-green radius w100p h40 lh40 j_l {{index % 2 === 0 ? 'item_odd' : 'item_even'}}">
         <text class="w50p">{{item.songname}}</text>
         <text class="w50p">{{item.singer.name}}</text> </view>

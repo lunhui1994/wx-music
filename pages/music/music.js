@@ -23,7 +23,7 @@ Page({
       type: "song",
       source: "tencent"
     }, //搜索信息
-    songList: [], // 歌曲列表 top100
+    topList: [], // 歌曲列表 top100
     searchList: [], //搜索列表 前100
     jayList: [], //jaychou 前60
     playList: [], //播放列表
@@ -137,7 +137,6 @@ Page({
       for (let i = 0; i < list.length; i++) {
         list[i].index = i;
         list[i].lrcContext = '';
-
       }
       that.setData({
         searchList: list,
@@ -145,32 +144,8 @@ Page({
       })
     })
   },
-  getSinglePlay: function (data) {
-    let that = this;
-    service.getSongurl({ songmid: data.songmid }, function (res) {
-      data.url = res.data.data.musicUrl;
-      data.vkey = res.data.data.vkey;
-      data.lrcContext = res.data.data.lyric;
-      if (data.vkey === '') {
-        return that.getSinglePlay(app.globalData.playerData.playList[data.index + 1])
-      }
-      // 播放器组件 内部api 加载歌曲信息。
-      that.player.getSinglePlay(data);
-    })
-  },
-  //歌曲点播 
-  tapSinglePlay: function (event) {
-    let that = this;
-    let data = event.currentTarget.dataset.music;
-    that.getSinglePlay(data);
-  },
-  // 子组件调用music getSinglePlay点播
-  toPlayerSinglePlay: function (e) {
-    let that = this;
-    let data = app.globalData.playerData.playList[e.detail.index];
-    that.getSinglePlay(data)
-  },
-  getQMusic: function () {
+   // 获取音乐top100列表
+   getQMusic: function () {
     let that = this;
     service.getQMusic(function (res) {
       let list = res.data.data.list;
@@ -178,13 +153,15 @@ Page({
         list[i].index = i;
         list[i].lrcContext = '';
       }
+      console.info(list)
       that.setData({
-        songList: list,
+        topList: list,
       })
       app.globalData.playerData.playList = list;
       that.getSinglePlay(list[0]);
     })
   },
+  // 获取周董歌曲列表
   getQjayChou: function () {
     let that = this;
     service.getQjayChou(function (res) {
@@ -197,6 +174,43 @@ Page({
         jayList: list
       })
     })
+  },
+  getSinglePlay: function (data) {
+    let that = this;
+    service.getSongurl({ songmid: data.songmid }, function (res) {
+      data.url = res.data.data.musicUrl;
+      data.vkey = res.data.data.vkey;
+      data.lrcContext = res.data.data.lyric;
+      if (data.vkey === '') {
+        
+        return that.getSinglePlay(app.globalData.playerData.playList[data.index + 1])
+      }
+      // 播放器组件 内部api 加载歌曲信息。
+      that.player.getSinglePlay(data);
+    })
+  },
+  //歌曲点播 
+  tapSinglePlay: function (event) {
+    let that = this;
+    let data = event.currentTarget.dataset.music;
+    switch (that.data.TabCur) {
+      case 0: 
+        app.globalData.playerData.playList = that.data.searchList;
+        break;
+      case 1: 
+        app.globalData.playerData.playList = that.data.topList;
+        break;
+      case 2: 
+        app.globalData.playerData.playList = that.data.jayList;
+        break;
+    }
+    that.getSinglePlay(data);
+  },
+  // 子组件调用music getSinglePlay点播
+  toPlayerSinglePlay: function (e) {
+    let that = this;
+    let data = app.globalData.playerData.playList[e.detail.index];
+    that.getSinglePlay(data)
   },
   /**
    * 生命周期函数--监听页面加载
